@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import DefulteUserConfig from './data/DefulteUserConfig'
+import DefulteUserConfig from '@/data/DefulteUserConfig'
 import { eventBus } from '@/main'
 import data from '@/data/data'
 

@@ -1,6 +1,18 @@
 @tailwind base;
 @tailwind components;
-.test{
-    @apply bg-black;
-}
+    .lableClasses{
+        @apply block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2;
+    }
+    .selectClasses{
+        @apply block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight;
+    }
+    .selectClasses:focus{
+        @apply  outline-none bg-white border-gray-500;
+    }
+    .btnClasses{
+        @apply appearance-none block w-full text-gray-700 font-bold uppercase border border-gray-200 rounded-lg py-2 px-4 leading-tight;
+    }
+    .btnClasses:focus{
+        @apply  outline-none bg-white border-gray-500;
+    }
 @tailwind utilities;
