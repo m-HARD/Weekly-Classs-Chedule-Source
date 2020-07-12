@@ -17,11 +17,11 @@
 </template>
 
 <script>
-import { eventBus } from '@/main'
+import { eventBus } from './main'
 import data from './data/data'
-import MainUI from './MainUI'
-import UserConfigUI from './UserConfigUI'
-import viewSomeData from './ViewSomeData'
+import MainUI from './pages/MainUI'
+import UserConfigUI from './pages/UserConfigUI'
+import viewSomeData from './pages/ViewSomeData'
 import Vue from 'vue'
 
 
