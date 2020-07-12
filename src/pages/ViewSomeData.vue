@@ -14,7 +14,7 @@
           <tbody>
             <tr class="flex flex-wrap">
               <td class="w-20 font-semibold"> عدد الحصص</td>
-              <td class="w-16" v-for="teacher in teachers" :key="teacher.id">{{ userDataBy('teacher',teacher.id).length }}</td>
+              <td class="w-16" v-for="teacher in teachers" :key="teacher.id">{{ getSubCount('teacher',teacher.id) }}</td>
             </tr>
           </tbody>
         </table>
@@ -32,7 +32,7 @@
           <tbody>
             <tr class="flex flex-wrap">
               <td class="w-20 font-semibold"> عدد الحصص</td>
-              <td class="w-16" v-for="theClass in classes" :key="theClass.id">{{ userDataBy('class',theClass.id).length }}</td>
+              <td class="w-16" v-for="theClass in classes" :key="theClass.id">{{ getSubCount('class',theClass.id) }}</td>
             </tr>
           </tbody>
         </table>
@@ -92,6 +92,16 @@ export default {
         }
         })
         return done
+    },
+    getSubCount(by,id){
+      let count = 0
+      let subjects = this.userDataBy(by,id)
+
+      subjects.forEach(singleSubject => {
+        count += singleSubject.size
+      });
+
+      return count
     },
     userDataBy(by,id){
       if (by == "class") {
