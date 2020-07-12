@@ -1,6 +1,6 @@
 <template>
-  <div name="App">
-    <div class="bg-gray-100 min-h-screen" style="width: max-content;" dir="rtl">
+  <div name="App" style="min-width: -webkit-fill-available;width: max-content;">
+    <div class="bg-gray-100 min-h-screen" dir="rtl">
       <div class="p-5 mx-10">
         <nav class="w-full py-2 flex justify-center bg-gray-600">
           <span @click="navigate('app-main-ui')" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">main</span>

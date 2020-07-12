@@ -21,7 +21,7 @@
 
       <div class="w-full mt-20">
 
-        <table class="w-full table-auto mt-10" v-for="theClass in classes" :key="theClass.id">
+        <table class="table-auto mt-10" v-for="theClass in classes" :key="theClass.id">
           <thead>
             <tr class="flex flex-wrap font-bold mb-1 border-b-2 border-gray-400">
               <td class="w-64 font-extrabold text-xl">الصف {{ theClass.name }}</td>

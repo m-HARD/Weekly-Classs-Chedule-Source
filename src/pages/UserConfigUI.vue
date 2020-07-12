@@ -13,18 +13,39 @@
         <button class="p-2 mt-5 mx-5 bg-gray-400 rounded hover:bg-gray-500 focus:outline-none cursor-pointer"
           @click="sortUserConfigBySize()">sort by size</button>
       </div>
-      
-      <div class="mt-64">
-        <ul v-for="(userconfig,i) in defultUserConfigBeforeChange" :key="i">
-          <li>{{ userconfig }}</li>
-        </ul>
+  
+      <div class="w-full mt-20">
+
+        <table class="table-auto mt-10">
+          <thead>
+            <tr class="flex flex-wrap font-bold mb-1 border-b-2 border-gray-400">
+              <td class="w-20 font-extrabold text-xl"></td>
+              <td class="w-32 font-extrabold text-xl">الصف</td>
+              <td class="w-32 font-extrabold text-xl">المادة</td>
+              <td class="w-32 font-extrabold text-xl">الأستاذ</td>
+              <td class="w-32 font-semibold text-center">العدد</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="(userconfig,i) in defultUserConfigBeforeChange" :key="i">
+              <td class="w-20 font-semibold">{{ i+1 }}</td>
+              <td class="w-32 font-semibold">{{ userconfig.theClass.name }}</td>
+              <td class="w-32 font-semibold">{{ userconfig.subject.name }}</td>
+              <td class="w-32 font-semibold">{{ userconfig.teacher.name }}</td>
+              <td class="w-32 font-semibold   text-center">{{ userconfig.size }}</td>
+            </tr>
+          </tbody>
+        </table>
+
       </div>
+
       <div class="w-full flex justify-center mt-10">
         <button class="p-2 mt-5 mx-5 bg-gray-400 rounded hover:bg-gray-500 focus:outline-none cursor-pointer"
           @click="retailUserConfig('all')">retail user config</button>
         <button class="p-2 mt-5 mx-5 bg-gray-400 rounded hover:bg-gray-500 focus:outline-none cursor-pointer"
           @click="retailUserConfig('class',5)">retail user config by class</button>
       </div>
+
       <div class="mt-10">
         after change :
         <ul v-for="(userconfig,i) in data.userConfig" :key="i">
