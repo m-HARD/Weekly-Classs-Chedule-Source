@@ -278,12 +278,16 @@ export default {
             }
           })
           
-          if (theAllSubjectTry++ == 20) {
+          
+          if (++theAllSubjectTry == 20) {
             break
           }
           if (canNotAddClassCount > 0 && theAllSubjectTry % 5 == 0) {
             console.log("change table");
             this.addSubjectToAllClassWithOutCheck()
+          }
+          if (canNotAddClassCount > 0 && theAllSubjectTry % 10 == 0) {
+            console.log("change user Config");
           }
       }
       theAllSubjectTry = 0
