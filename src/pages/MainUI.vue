@@ -157,7 +157,7 @@ export default {
           if (data.data.size == 2) {
             validation = validation && this.nextLocIsEmpty(sc1.data[randomSubInDay + 1], data.teacherId, sc1.loc, sc1.data[randomSubInDay].loc)
           }
-          if (data.data.duplication == 2) {
+          if (!data.data.duplication) {
             validation = validation && this.DayHasNoThisSubject(data.data.theClass.id, sc1.loc, data.data.subject.id)
           }
         } while (!(validation));

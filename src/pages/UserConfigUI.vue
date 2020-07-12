@@ -18,12 +18,15 @@
 
         <table class="table-auto mt-10">
           <thead>
-            <tr class="flex flex-wrap font-bold mb-1 border-b-2 border-gray-400">
+            <tr class="flex flex-wrap font-bold mb-1 border-b-2 border-gray-400 items-center">
               <td class="w-20 font-extrabold text-xl"></td>
               <td class="w-32 font-extrabold text-xl">الصف</td>
               <td class="w-32 font-extrabold text-xl">المادة</td>
               <td class="w-32 font-extrabold text-xl">الأستاذ</td>
-              <td class="w-32 font-semibold text-center">العدد</td>
+              <td class="w-32 font-extrabold text-xl text-center">العدد</td>
+              <td class="w-32 font-extrabold text-xl">طريقة التوزيع</td>
+              <td class="w-48 font-extrabold text-xl">امكانية وجود نفس المادة في مكانين مختلفين ويوم واحد</td>
+              <td class="w-32 font-extrabold text-xl text-center">حذف</td>
             </tr>
           </thead>
           <tbody>
@@ -32,7 +35,12 @@
               <td class="w-32 font-semibold">{{ userconfig.theClass.name }}</td>
               <td class="w-32 font-semibold">{{ userconfig.subject.name }}</td>
               <td class="w-32 font-semibold">{{ userconfig.teacher.name }}</td>
-              <td class="w-32 font-semibold   text-center">{{ userconfig.size }}</td>
+              <td class="w-32 font-semibold text-center">{{ userconfig.size }}</td>
+              <td class="w-32 font-semibold">{{ retailTypes[userconfig.retail] }}</td>
+              <td class="w-48 font-semibold text-center">{{ userconfig.duplication ? 'نعم':'لا' }}</td>
+              <td class="w-32 font-semibold text-center">
+                <span @click="DeleteFromDefultUserConfigBeforeChange(i)" class="text-red-500 cursor-pointer">X</span>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -57,37 +65,79 @@
 
 
       <div>
-        <div class='flex justify-center mt-20'>
+        <form class='flex justify-center mt-20' @submit.prevent="addToUserConfig()">
             <div class='w-full max-w-2xl bg-white rounded-lg p-6'>
                 <div class='flex flex-wrap -mx-3'>
         
-                    <div class='w-1/3 px-3 mb-6'>
-                        <label class='lableClasses'>teachers</label>
+                    <div class='w-full px-3 mb-6'>
+                        <label class='lableClasses'>الأستاذ</label>
                         <div class='relative'>
-                            <select v-model="userTeacher" class='selectClasses'>
+                            <select v-model="userInput.teacher" class='selectClasses'>
                                 <option v-for="(teacher,index) in teachers" :value="teacher" :key="index">{{ teacher.name }}</option>
                             </select>
                             <div v-html="svg()" />
                         </div>
                     </div>
                     <div class='w-1/3 px-3 mb-6'>
-                        <label class='lableClasses'>subjects</label>
+                        <label class='lableClasses'>المادة</label>
                         <div class='relative'>
-                            <select v-model="userSubjects" class='selectClasses'>
+                            <select v-model="userInput.subject" class='selectClasses'>
                                 <option v-for="(subject,index) in subjects" :key="index" :value="subject" v-text="subject.name"></option>
                             </select>
                             <div v-html="svg()" />
                         </div>
                     </div>
                     <div class='w-1/3 px-3 mb-6'>
-                        <label class='lableClasses'>class</label>
+                        <label class='lableClasses'>الفصل</label>
                         <div class='relative'>
-                            <select v-model="userClass" class='selectClasses'>
+                            <select v-model="userInput.theClass" class='selectClasses'>
                                 <option v-for="(theClass,index) in classes" :key="index" :value="theClass" v-text="theClass.name"></option>
                             </select>
                             <div v-html="svg()" />
                         </div>
                     </div>
+                    <div class='w-1/3 px-3 mb-6'>
+                        <label class='lableClasses'>عدد الحصص</label>
+                        <div class='relative'>
+                          <input type="number" v-model.number="userInput.size" class='selectClasses'>
+                        </div>
+                    </div>
+                    <div class='w-full px-3 mb-6'>
+                        <label class='lableClasses'>طريقة التوزيع</label>
+                        <div class='relative'>
+                          <div class="block">
+                            <input type="radio" v-model.number="userInput.retailType" name="retail" value="0" class="mx-2 my-2 py-1 cursor-pointer">
+                            <label for="retail">{{ retailTypes[0] }}</label>
+                          </div>
+                          <div class="block">
+                            <input type="radio" v-model.number="userInput.retailType" name="retail" value="1" class="mx-2 my-2 py-1 cursor-pointer">
+                            <label for="retail">{{ retailTypes[1] }}</label>
+                          </div>
+                          <div class="block">
+                            <input type="radio" v-model.number="userInput.retailType" name="retail" value="2" class="mx-2 my-2 py-1 cursor-pointer">
+                            <label for="retail">{{ retailTypes[2] }}</label>
+                          </div>
+                          <div class="block">
+                            <input type="radio" v-model.number="userInput.retailType" name="retail" value="3" class="mx-2 my-2 py-1 cursor-pointer">
+                            <label for="retail">{{ retailTypes[3] }}</label>
+                          </div>
+                          <div class="block">
+                            <input type="radio" v-model.number="userInput.retailType" name="retail" value="4" class="mx-2 my-2 py-1 cursor-pointer">
+                            <label for="retail">
+                              {{ retailTypes[4] }}
+                              <span class="text-xs text-red-400">*يرجى اختيار هذا الخيار في حالة المادة للفصول الصغيرة أولى تانية.. والتي نقبل عدة حصص في نقس اليوم</span>
+                            </label>
+                          </div>
+                        </div>
+                    </div>
+                    <div class='w-full px-3 mb-6'>
+                      <div class="w-full flex items-center">
+                        <input type="checkbox" v-model.number="userInput.duplication" name="duplication" class="mx-2 my-2 py-1 cursor-pointer">
+                        <label class='lableClasses'>امكانية وجود نفس المادة في مكانين مختلفين ويوم واحد</label>
+                      </div>
+                        <span class="block text-xs text-red-400">*يرجى اختيار هذا الخيار في حالة المادة للفصول الصغيرة أولى تانية.. والتي نقبل عدة حصص في نقس اليوم</span>
+                    </div>
+
                     <!-- <div class='w-1/3 px-3 mb-6'>
                         <label class='lableClasses'>الكمية</label>
                         <input v-model.number="wardCountInput" class='appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500' type='number' >
@@ -95,13 +145,13 @@
 
 
                     <div class='w-full px-3'>
-                        <button class='btnClasses bg-green-400' @click="addToUserConfig()">add</button>
+                      <input class='btnClasses py-4 bg-green-400' type="submit" value="add">
                     </div>
 
         
                 </div>
             </div>
-        </div>
+        </form>
       </div>
 
   </div>
@@ -125,9 +175,17 @@ export default {
     return {
       defultUserConfigBeforeChange:DefulteUserConfig,
 
-      userClass:null,
-      userTeacher:null,
-      userSubjects:null
+      userInput:{
+        theClass:null,
+        teacher:null,
+        subject:null,
+        size:null,
+        retailType:null,
+        duplication:false
+      },
+
+
+      retailTypes:["التوزيع الذكي","1.1.1...","2.2.2....","ملء الجدول","عشوائي"]
     }
   },
   methods: {
@@ -257,6 +315,9 @@ export default {
       return retailArray
 
     },
+    DeleteFromDefultUserConfigBeforeChange(index){
+          this.defultUserConfigBeforeChange.splice(index,1);
+    },
     sortUserConfigBySubject(){
       this.data.userConfig.sort(function (a,b) {
           return ((a.subject.id == b.subject.id) ? 0 : ((a.subject.id > b.subject.id) ? 1 : -1 ));       
@@ -268,13 +329,21 @@ export default {
       }.bind(this));
     },
     addToUserConfig(){
-        if(this.userClass == null || this.userTeacher == null || this.userSubjects == null) return
-        this.data.userConfig.push({
-            theClass:this.userClass,
-            teacher:this.userTeacher,
-            subject:this.userSubjects
+      var Input = this.userInput
+        if(Input.theClass == null || Input.teacher == null || Input.subject == null) return
+        this.defultUserConfigBeforeChange.push({
+            theClass: Input.theClass,
+            teacher: Input.teacher,
+            subject: Input.subject,
+            size: Input.size,
+            duplication: Input.duplication,
+            retail: Input.retailType
         })
-        this.userTeacher = null;this.userSubjects = null;
+        Input.teacher = null;
+        Input.subject = null;
+        Input.size = null;
+        Input.duplication = null;
+        Input.retailType = null
     },
     sortUserConfigByTeatcherCount(){
       this.data.userConfig.sort(function (a,b) {
@@ -291,7 +360,7 @@ export default {
     },
     sortUserConfigByDuplication(){
       this.data.userConfig.sort(function (a,b) {
-          return ((a.duplication == b.duplication) ? 0 : ((a.duplication < b.duplication) ? 1 : -1 ));       
+          return ((a.duplication == b.duplication) ? 0 : ((a.duplication > b.duplication) ? 1 : -1 ));       
       }.bind(this));
     },
     sortUserConfigBySize(){
