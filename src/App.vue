@@ -3,9 +3,10 @@
     <div class="bg-gray-100 min-h-screen" dir="rtl">
       <div class="p-5 mx-10">
         <nav class="w-full py-2 flex justify-center bg-gray-600">
-          <span @click="navigate('app-main-ui')" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">main</span>
-          <span @click="navigate('app-user-config-ui')" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">UserConfigUI</span>
-          <span @click="navigate('app-view-some-data')" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">some data</span>
+          <span @click="currentView ='app-main-ui'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">Main</span>
+          <span @click="currentView ='app-user-config-ui'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">User ConfigUI</span>
+          <span @click="currentView ='initial-table'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">Initial Table</span>
+          <span @click="currentView ='app-view-some-data'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">some data</span>
         </nav>
         
         <keep-alive>
@@ -24,11 +25,13 @@ import data from './data/data'
 import MainUI from './pages/MainUI'
 import UserConfigUI from './pages/UserConfigUI'
 import viewSomeData from './pages/ViewSomeData'
+import InitialTable from './pages/InitialTable'
 import Vue from 'vue'
 
 
 Vue.component('app-main-ui',MainUI)
 Vue.component('app-user-config-ui',UserConfigUI)
+Vue.component('initial-table',InitialTable)
 Vue.component('app-view-some-data',viewSomeData)
 export default {
   name: 'App',
@@ -47,9 +50,6 @@ export default {
     })
   },
   methods: {
-    navigate(nextUrl){
-      this.currentView = nextUrl
-    },
     addSubInClass(){
             var id=0
             for (let y = 0; y < this.classes.length; y++) {
