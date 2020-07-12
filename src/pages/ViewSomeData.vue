@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import data from './data/data'
+import data from '@/data/data'
 export default {
   name: 'viewSomeData',
   mixins:[data],

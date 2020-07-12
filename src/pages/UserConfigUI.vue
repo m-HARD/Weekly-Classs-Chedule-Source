@@ -89,7 +89,7 @@
 <script>
 import DefulteUserConfig from './data/DefulteUserConfig'
 import { eventBus } from '@/main'
-import data from './data/data'
+import data from '@/data/data'
 
 export default {
   name: 'viewSomeData',
