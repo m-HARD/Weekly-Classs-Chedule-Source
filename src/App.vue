@@ -10,7 +10,7 @@
         </nav>
         
         <keep-alive>
-          <component :is="currentView" :data="{subInClasses:subInClasses,userConfig:userConfig}"></component>
+          <component :is="currentView" :data="{subInClasses:subInClasses,userConfig:userConfig,userConfigBeforeChange:userConfigBeforeChange}"></component>
         </keep-alive>
 
 
@@ -21,6 +21,7 @@
 
 <script>
 import { eventBus } from './main'
+import DefulteUserConfig from '@/data/DefulteUserConfig'
 import data from './data/data'
 import MainUI from './pages/MainUI'
 import UserConfigUI from './pages/UserConfigUI'
@@ -41,6 +42,7 @@ export default {
       currentView:'app-main-ui',
       subInClasses:[],
       userConfig:[],
+      userConfigBeforeChange:DefulteUserConfig,
     }
   },
   created() {
@@ -51,28 +53,28 @@ export default {
   },
   methods: {
     addSubInClass(){
-            var id=0
-            for (let y = 0; y < this.classes.length; y++) {
-              var theClass = this.classes[y];
-              var subInClass = []
-              
-              for (let x = 0; x < this.dayOfWeek.length; x++) {
-                var sub = []
-                for (let i = 0; i < theClass.subInDay; i++) {
-                  sub.push({
-                      id:id,
-                      sId:i+','+x+','+y,
-                      oId:[y,x,i],
-                      subject:{id:null,name:null},
-                      teacher:{id:null,name:null}
-                    })
-                  id++;
-                }
-                subInClass.push(sub)
-              }
-              this.subInClasses.push(subInClass)
-            }
-          },
+      var id=0
+      for (let y = 0; y < this.classes.length; y++) {
+        var theClass = this.classes[y];
+        var subInClass = []
+        
+        for (let x = 0; x < this.dayOfWeek.length; x++) {
+          var sub = []
+          for (let i = 0; i < theClass.subInDay; i++) {
+            sub.push({
+                id:id,
+                sId:i+','+x+','+y,
+                oId:[y,x,i],
+                subject:{id:null,name:null},
+                teacher:{id:null,name:null}
+              })
+            id++;
+          }
+          subInClass.push(sub)
+        }
+        this.subInClasses.push(subInClass)
+      }
+    },
   },
 }
 </script>

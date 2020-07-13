@@ -30,7 +30,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="(userconfig,i) in defultUserConfigBeforeChange" :key="i">
+            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="(userconfig,i) in data.userConfigBeforeChange" :key="i">
               <td class="w-20 font-semibold">{{ i+1 }}</td>
               <td class="w-32 font-semibold">{{ userconfig.theClass.name }}</td>
               <td class="w-32 font-semibold">{{ userconfig.subject.name }}</td>
@@ -39,7 +39,7 @@
               <td class="w-32 font-semibold">{{ retailTypes[userconfig.retail] }}</td>
               <td class="w-48 font-semibold text-center">{{ userconfig.duplication ? 'نعم':'لا' }}</td>
               <td class="w-32 font-semibold text-center">
-                <span @click="DeleteFromDefultUserConfigBeforeChange(i)" class="text-red-500 cursor-pointer">X</span>
+                <span @click="DeleteFromuserConfigBeforeChange(i)" class="text-red-500 cursor-pointer">X</span>
               </td>
             </tr>
           </tbody>
@@ -158,7 +158,6 @@
 </template>
 
 <script>
-import DefulteUserConfig from '@/data/DefulteUserConfig'
 import { eventBus } from '@/main'
 import data from '@/data/data'
 
@@ -173,8 +172,6 @@ export default {
   },
   data() {
     return {
-      defultUserConfigBeforeChange:DefulteUserConfig,
-
       userInput:{
         theClass:null,
         teacher:null,
@@ -192,7 +189,7 @@ export default {
     checkIfFoundError(){
       var returnVal = false
 
-      this.defultUserConfigBeforeChange.forEach(singleUserConfig => {
+      this.data.userConfigBeforeChange.forEach(singleUserConfig => {
         if (singleUserConfig.size > this.dayOfWeek.length * 2) {
           returnVal = true
         }  
@@ -205,10 +202,10 @@ export default {
       var endArray = []
       if (this.checkIfFoundError())return
 
-      var userConfigAfterFilter = this.defultUserConfigBeforeChange;
+      var userConfigAfterFilter = this.data.userConfigBeforeChange;
 
       if (mode == "class" && theClass != null) {
-        var userConfigOfClass =  this.defultUserConfigBeforeChange.filter(singleUserConfig => {
+        var userConfigOfClass =  this.data.userConfigBeforeChange.filter(singleUserConfig => {
           return singleUserConfig.theClass.id == theClass
         })
         userConfigAfterFilter = userConfigOfClass;
@@ -315,8 +312,8 @@ export default {
       return retailArray
 
     },
-    DeleteFromDefultUserConfigBeforeChange(index){
-          this.defultUserConfigBeforeChange.splice(index,1);
+    DeleteFromuserConfigBeforeChange(index){
+          this.data.userConfigBeforeChange.splice(index,1);
     },
     sortUserConfigBySubject(){
       this.data.userConfig.sort(function (a,b) {
@@ -331,7 +328,7 @@ export default {
     addToUserConfig(){
       var Input = this.userInput
         if(Input.theClass == null || Input.teacher == null || Input.subject == null) return
-        this.defultUserConfigBeforeChange.push({
+        this.data.userConfigBeforeChange.push({
             theClass: Input.theClass,
             teacher: Input.teacher,
             subject: Input.subject,
