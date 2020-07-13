@@ -5,13 +5,13 @@
           @click="startCheckStetment()">Start Check</button>
       </div>
 
-      <div class="mt-64">
-        <ul class="mx-5" v-for="(error,i) in errorsFound" :key="i">
-          <li>{{ error.details }}</li>
-        </ul>
-      </div>
+      <div class="w-full mt-20" v-if="showTable">
+        <div class="mt-64">
+          <ul class="mx-5" v-for="(error,i) in errorsFound" :key="i">
+            <li>{{ error.details }}</li>
+          </ul>
+        </div>
 
-        <div class="w-full mt-20">
         <table class="table-auto mt-10" v-for="theClass in classes" :key="theClass.id">
           <thead>
             <tr class="flex flex-wrap font-bold mb-1 border-b-2 border-gray-400">
@@ -22,7 +22,8 @@
           <tbody>
             <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="day in dayOfWeek" :key="day.id">
               <td class="w-64 font-semibold">{{ day.name }}</td>
-              <td class="w-56" v-for="(sub,i) in fullInitialTable[theClass.id -1][day.id-1]" :key="i">
+              <td class="w-56" v-for="(sub,i) in fullInitialTable[theClass.id -1][day.id-1]" :key="i"
+                :class="{'bg-red-200':sub.subject == null}">
                 {{ sub.oId }} {{ sub.subject }}
               </td>
             </tr>
@@ -45,11 +46,12 @@ export default {
     },
     data() {
         return {
-            initialTable:[],
+          showTable:false,
+          initialTable:[],
 
-            fullInitialTable:[],
+          fullInitialTable:[],
 
-            errorsFound:[]
+          errorsFound:[]
         }
     },
     created() {
@@ -80,13 +82,10 @@ export default {
       },
       addSubjectsToFullArray(){
         this.initialTable.forEach(singleSub => {
-          console.log("#1");
           let notBreak = true
 
           this.fullInitialTable[singleSub.theClass.id -1].every(day => {
-          console.log("#2");
             day.every(sub => {
-          console.log("#3");
               if (sub.subject == null) {
                 sub.subject = singleSub.subject.name
                 sub.teacher = singleSub.teacher.name
@@ -103,6 +102,21 @@ export default {
               from:'subjects',
               details:"class : "+singleSub.theClass.name + " ,Can't add to the table",
               data:singleSub
+            })
+          }
+        });
+      },
+      chaeckTeacher(){
+        this.teachers.forEach(teacher => {
+          let teacherTable = this.initialTable.filter(data => {
+            return data.teacher.id == teacher.id
+          });
+          if (teacherTable.length > 30) {
+            this.errorsFound.push({
+              type:'Overloaded',
+              from:'teachers',
+              details:"teacher : "+teacher.name + " ,Can't add to the table",
+              data:teacher
             })
           }
         });
@@ -132,7 +146,13 @@ export default {
         this.initialTable = endArray
         this.restartData();
         this.addSubjectsToFullArray();
+        this.chaeckTeacher();
+        this.showTable = true
       }
+    },
+    deactivated(){
+      this.showTable = false
+      this.restartData()
     }
 
 }
