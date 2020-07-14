@@ -68,7 +68,9 @@ export default {
                 this.data.target.splice(index,1)
             }
             
-            if (id == null) {
+            if (id == null && isExist.length == 1) {
+                console.log("Delete Successfully");
+            }else if (id == null) {
                 let itemAdd = Object.assign({}, this.data.options[0])
                 if (typeof itemAdd != 'undefined') {
                     itemAdd.subject = {"id":0,"name":"فراغ"}
