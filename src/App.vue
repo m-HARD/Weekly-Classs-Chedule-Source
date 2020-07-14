@@ -5,6 +5,7 @@
         <nav class="w-full py-2 flex justify-center bg-gray-600">
           <span @click="currentView ='app-main-ui'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">Main</span>
           <span @click="currentView ='app-user-config-ui'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">User ConfigUI</span>
+          <span @click="currentView ='fixed-subjects'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">Fixed Subjects</span>
           <span @click="currentView ='initial-table'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">Initial Table</span>
           <span @click="currentView ='app-view-some-data'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">some data</span>
         </nav>
@@ -26,12 +27,14 @@ import data from './data/data'
 import MainUI from './pages/MainUI'
 import UserConfigUI from './pages/UserConfigUI'
 import viewSomeData from './pages/ViewSomeData'
+import FixedSubjects from './pages/FixedSubjects'
 import InitialTable from './pages/InitialTable'
 import Vue from 'vue'
 
 
 Vue.component('app-main-ui',MainUI)
 Vue.component('app-user-config-ui',UserConfigUI)
+Vue.component('fixed-subjects',FixedSubjects)
 Vue.component('initial-table',InitialTable)
 Vue.component('app-view-some-data',viewSomeData)
 export default {
