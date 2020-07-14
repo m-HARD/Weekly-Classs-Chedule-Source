@@ -12,6 +12,8 @@
           @click="sortUserConfigByDuplication()">sort by duplication</button>
         <button class="p-2 mt-5 mx-5 bg-gray-400 rounded hover:bg-gray-500 focus:outline-none cursor-pointer"
           @click="sortUserConfigBySize()">sort by size</button>
+        <button class="p-2 mt-5 mx-5 bg-gray-400 rounded hover:bg-gray-500 focus:outline-none cursor-pointer"
+          @click="sortUserConfigByFixed()">sort by Fixed</button>
       </div>
   
       <div class="w-full mt-20">
@@ -219,7 +221,8 @@ export default {
             "teacher":singleUserConfig.teacher,
             "subject":singleUserConfig.subject,
             "size":theSize,
-            "duplication":singleUserConfig.duplication
+            "duplication":singleUserConfig.duplication,
+            "fixed":singleUserConfig.fixed
           })
         });
       })
@@ -363,6 +366,11 @@ export default {
     sortUserConfigBySize(){
       this.data.userConfig.sort(function (a,b) {
           return ((a.size == b.size) ? 0 : ((a.size < b.size) ? 1 : -1 ));       
+      }.bind(this));
+    },
+    sortUserConfigByFixed(){
+      this.data.userConfig.sort(function (a,b) {
+          return ((a.fixed.status == b.fixed.status) ? 0 : ((a.fixed.status < b.fixed.status) ? 1 : -1 ));       
       }.bind(this));
     },
   }

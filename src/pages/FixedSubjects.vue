@@ -14,8 +14,8 @@
             <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="day in dayOfWeek" :key="day.id">
               <td class="w-64 font-semibold">{{ day.name }}</td>
               <td class="w-56" v-for="(sub,i) in fullInitialTable[theClass.id -1][day.id-1]" :key="i">
-                <button @click="addSubject(theClass, day, i)" class="btnClasses bg-gray-300 h-20">
-                  {{ sub.oId }} {{ sub.subject }}
+                <button @click="addSubject(theClass, day, i)" class="btnClasses bg-gray-300 h-10">
+                  {{ sub.subject }} {{ sub.teacher != null && sub.teacher != "" ? '('+sub.teacher+')':'' }}
                 </button>
               </td>
             </tr>

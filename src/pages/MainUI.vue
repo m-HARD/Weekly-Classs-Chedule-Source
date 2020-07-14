@@ -131,17 +131,29 @@ export default {
       });
       return hasNot;
     },
+    addFixedSubjectsToClasses(){
+      this.data.userConfig.filter(isFixed => {
+        return isFixed.fixed.status
+      }).forEach((data)=>{
+        var theClass = this.data.subInClasses[data.theClass.id -1]
+        theClass[data.fixed.location.day][data.fixed.location.sub].subject = data.subject
+        theClass[data.fixed.location.day][data.fixed.location.sub].teacher = data.teacher
+      })
+    },
     canAdd(data){
+      if (data.data.fixed.status)return {iCan:false,location:0,location2:0}
+
       var theTry = 0;
       var emptyInClass = this.emptySubInClass(data.theClass);
       var canAdd = false
 
       if (emptyInClass.length > 0){
         canAdd = true
+        var randomDay,randomSubInDay,validation = true;
 
         do {
-          var randomDay = Math.floor(Math.random() * emptyInClass.length)
-          var randomSubInDay = Math.floor(Math.random() * emptyInClass[randomDay].data.length)
+          randomDay = Math.floor(Math.random() * emptyInClass.length)
+          randomSubInDay = Math.floor(Math.random() * emptyInClass[randomDay].data.length)
 
           if(theTry++ == 500){
             canAdd = false;
@@ -152,7 +164,7 @@ export default {
           var sc1 = emptyInClass[randomDay]
 
           var teacherIsEmpty = this.teacherIsEmpty(data.teacherId, sc1.loc, sc1.data[randomSubInDay].loc)
-          var validation = sc1.data[randomSubInDay].data.subject.name == null && teacherIsEmpty
+          validation = sc1.data[randomSubInDay].data.subject.name == null && teacherIsEmpty
           
           if (data.data.size == 2) {
             validation = validation && this.nextLocIsEmpty(sc1.data[randomSubInDay + 1], data.teacherId, sc1.loc, sc1.data[randomSubInDay].loc)
@@ -161,6 +173,7 @@ export default {
             validation = validation && this.DayHasNoThisSubject(data.data.theClass.id, sc1.loc, data.data.subject.id)
           }
         } while (!(validation));
+
 
       }else{
         this.iCanNotAddIt[data.data.theClass.id -1].push(data.data)
@@ -181,6 +194,7 @@ export default {
       var theClass = this.data.subInClasses[id -1]
 
       var canAdd = this.canAdd({theClass:theClass,teacherId:data.teacher.id,data:data})
+
       if (canAdd.iCan) {
         canAdd.location.subject = data.subject
         canAdd.location.teacher = data.teacher
@@ -195,8 +209,7 @@ export default {
       this.restartData();
 
       //this.addSubjectToSpecificallyClass(5)
-
-
+      
       this.data.userConfig.forEach((data)=>{
         this.addSubjectToClass(data.theClass.id,data)
       })
@@ -219,7 +232,7 @@ export default {
           subInDay.teacher = {id:null,name:null}
         })
       });
-
+      this.addFixedSubjectsToClasses()
 
       this.userDataBy('class',classId).forEach((data)=>{
         this.addSubjectToClass(data.theClass.id,data)
@@ -305,6 +318,8 @@ export default {
           })
         });
       })
+      
+      this.addFixedSubjectsToClasses()
     }
   },
 }
