@@ -85,11 +85,11 @@ export default {
     getSubsOfTeacher(teacherId,theDay,theSubInDay){
         var done = [];
         this.data.subInClasses.forEach(theClass => {
-        if(typeof theClass[theDay][theSubInDay] != 'undefined'){
-            if (theClass[theDay][theSubInDay].teacher.id == teacherId) {
-              done.push(theClass[theDay][theSubInDay].subject.name + ' ('+ (theClass[theDay][theSubInDay].oId[0]+1) +')')
-            }
-        }
+          if(typeof theClass[theDay][theSubInDay] != 'undefined'){
+              if (theClass[theDay][theSubInDay].teacher.id == teacherId) {
+                done.push(theClass[theDay][theSubInDay].subject.name + ' ('+ (theClass[theDay][theSubInDay].oId[0]+1) +')')
+              }
+          }
         })
         return done
     },

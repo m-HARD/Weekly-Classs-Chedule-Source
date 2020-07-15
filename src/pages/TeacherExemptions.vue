@@ -1,22 +1,20 @@
 <template>
     <div name="InitialTable">
-      <Select v-if="select.showSelect" type="fixedSub" :data="{target:select.target,options:select.options,optionsShow:select.optionsShow,from:select.from}" @end="endSelect()"/>
 
       <div class="w-full mt-20">
-        <table class="table-auto mt-10" v-for="theClass in classes" :key="theClass.id">
+        <table class="table-auto mt-10" v-for="teacher in teachers" :key="teacher.id">
           <thead>
             <tr class="flex flex-wrap font-bold mb-1 border-b-2 border-gray-400">
-              <td class="w-64 font-extrabold text-xl">الصف {{ theClass.name }}</td>
-              <td class="w-56 font-semibold" v-for="(sub,i) in theClass.subInDay" :key="i">{{ subInDay[sub-1] }}</td>
+              <td class="w-64 font-extrabold text-xl">استاذ {{ teacher.name }}</td>
+              <td class="w-56 font-semibold" v-for="(sub,i) in 8" :key="i">{{ subInDay[sub-1] }}</td>
             </tr>
           </thead>
           <tbody>
             <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="day in dayOfWeek" :key="day.id">
               <td class="w-64 font-semibold">{{ day.name }}</td>
-              <td class="w-56" v-for="(sub,i) in fullInitialTable[theClass.id -1][day.id-1]" :key="i">
-                <button @click="addSubject(theClass, day, i)" class="btnClasses bg-gray-300 h-10">
-                  {{ sub.subject }} {{ sub.teacher != null && sub.teacher != "" ? '('+sub.teacher+')':'' }}
-                </button>
+              <td class="w-56" v-for="(sub,i) in 8" :key="i">
+                <button class="btnClasses bg-gray-300 h-10" :class="{'bg-red-300':TeachersExemptionsShow[teacher.id -1][day.id-1][sub-1]}"
+                      @click="exemptionReservation(teacher,day.id-1,sub-1)" />
               </td>
             </tr>
           </tbody>
@@ -27,11 +25,9 @@
 
 <script>
 import data from '@/data/data'
-import Select from '../components/Select'
 export default {
     name:"InitialTable",
     mixins:[data],
-    components:{Select},
     props:{
       data:{
         type:Object,
@@ -40,110 +36,87 @@ export default {
     },
     data() {
         return {
-          initialTable:[],
-          fullInitialTable:[],
-
-
-          select:{showSelect:false,target:null,options:[],optionsShow:[],from:{day:null,sub:null}},
-          toSelectData:[]
+          TeachersExemptions:[],
+          TeachersExemptionsShow:[]
         }
     },
     created() {
-      this.addFullInitialTable();
-    },
-    activated(){
-      this.addToTable();
-    },
-    methods: {
-      addSubject(theClass,day,sub){
-        this.select.showSelect=true
-        this.select.target = this.data.userConfigBeforeChange
-        this.select.from = {day:day.id-1,sub:sub}
-        this.select.options = this.data.userConfigBeforeChange.filter(single => {
-          return single.theClass.id == theClass.id && !single.fixed.status
-        })
-        this.select.optionsShow = this.select.options.map(single => {
-          return single.subject.name + " ("+ single.teacher.name +")" + " ("+ single.size +")"
-        })
-      },
-      endSelect(){
-        Object.assign(this.$data.select,this.$options.data.call(this).select)
-        this.addToTable();
-      },
-      addFullInitialTable(){
-        for (let y = 0; y < this.classes.length; y++) {
-          var theClass = this.classes[y];
-          var subInClass = []
+      this.TeachersExemptions = [...this.data.teacherExemptions]
+      for (let y = 0; y < this.teachers.length; y++) {
+        var theDay = []
           
           for (let x = 0; x < this.dayOfWeek.length; x++) {
             var sub = []
-            for (let i = 0; i < theClass.subInDay; i++) {
-              sub.push({
-                  oId:[y,x,i],
-                  subject:null,
-                  teacher:null
-                })
+            for (let i = 0; i < 8; i++) {
+              sub.push(false)
             }
-            subInClass.push(sub)
+            theDay.push(sub)
           }
-          this.fullInitialTable.push(subInClass)
+          this.TeachersExemptionsShow.push(theDay)
         }
+      this.TeacherExemptions()
+    },
+    activated() {
+    },
+    methods: {
+      TeacherExemptionsIsFound(teacherId){
+        let teacherExemptions = this.TeachersExemptions.filter(teacherExemption => {
+          return teacherExemption.teacher.id == teacherId
+        });
+        if (teacherExemptions.length >= 1) {
+          return teacherExemptions[0]
+        }
+
+        return false
       },
-      addFixedSubjects(){
-        this.initialTable.forEach(singleSub => {
-          if (typeof singleSub.fixed != 'undefined') {
-            if (singleSub.fixed.status) {
-              let subject = this.fullInitialTable[singleSub.theClass.id -1][singleSub.fixed.location.day][singleSub.fixed.location.sub]
+      ifExempyionIsExist(teacherExemption, day, sub){
+        let returnVal = false
+        teacherExemption.forEach((element,i) => {
+          if (element.day == day && element.sub == sub) {
+            returnVal = i
+          }
+        });
+        return returnVal
+      },
+      TeacherExemptions(){
+        this.teachers.forEach(teacher => {
+          let teacherExemptions = this.TeacherExemptionsIsFound(teacher.id)
   
-              subject.subject = singleSub.subject.name
-              subject.teacher = singleSub.teacher.name
-            }
+          if (teacherExemptions) {
+            teacherExemptions.locations.forEach(singleExemption => {
+              this.TeachersExemptionsShow[teacher.id -1][singleExemption.day][singleExemption.sub] = true
+            })
           }
         })
       },
-      addSubjectsToFullArray(){
-        this.initialTable.forEach(singleSub => {
-          let notBreak = true
+      exemptionReservation(teacher,day,sub){
+        let teacherExemptions = this.TeacherExemptionsIsFound(teacher.id)
 
-          this.fullInitialTable[singleSub.theClass.id -1].every(day => {
-            day.every(sub => {
-              if (sub.subject == null) {
-                sub.subject = singleSub.subject.name
-                sub.teacher = singleSub.teacher.name
+        if (teacherExemptions) {
+          let ifExempyionIsExist = this.ifExempyionIsExist(teacherExemptions.locations, day, sub)
+          if (ifExempyionIsExist !== false) {
+            this.$set(this.TeachersExemptionsShow[teacher.id -1][day], sub, false)
+            teacherExemptions.locations.splice(ifExempyionIsExist,1)
 
-                notBreak = false
+            if(teacherExemptions.locations.length == 0){
+              this.data.userConfigBeforeChange.filter(data => {
+                return data.teacher.id == teacher.id
+              }).map(data => {
+                data.isExemptions = false
+              })
+
+              let index = this.data.teacherExemptions.indexOf(teacherExemptions)
+              if (index != -1) {
+                this.data.teacherExemptions.splice(index,1)
               }
-              return notBreak
-            })
-              return notBreak
-          });
-        });
-      },
-      restartData(){
-        this.fullInitialTable.forEach(theClass => {
-          theClass.forEach(day => {
-            day.forEach(subInDay => {
-              subInDay.subject = null;
-              subInDay.teacher = null
-            })
-          });
-        })
-      },
-      addToTable(){
-        var endArray = []
-        this.data.userConfigBeforeChange.forEach(element => {
-          let size = element.size
-          while (size > 1) {
-            endArray.push(element);
-            size -= 1
+            }
+          }else{
+            this.$set(this.TeachersExemptionsShow[teacher.id -1][day], sub, true)
+            teacherExemptions.locations.push({day:day,sub:sub})
           }
-            endArray.push(element);
-        });
-        this.initialTable = endArray
-        this.restartData();
-        this.addFixedSubjects();
+        }
+
       }
     }
-
 }
 </script>
