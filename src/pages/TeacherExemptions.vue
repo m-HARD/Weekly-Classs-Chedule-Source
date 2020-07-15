@@ -1,17 +1,8 @@
 <template>
     <div name="InitialTable">
-      <div class="w-full flex justify-center">
-        <button class="p-2 mt-5 mx-5 bg-gray-400 rounded hover:bg-gray-500 focus:outline-none cursor-pointer"
-          @click="startCheckStetment()">Start Check</button>
-      </div>
+      <Select v-if="select.showSelect" type="fixedSub" :data="{target:select.target,options:select.options,optionsShow:select.optionsShow,from:select.from}" @end="endSelect()"/>
 
-      <div class="w-full mt-20" v-if="showTable">
-        <div class="mt-64">
-          <ul class="mx-5" v-for="(error,i) in errorsFound" :key="i">
-            <li>{{ error.details }}</li>
-          </ul>
-        </div>
-
+      <div class="w-full mt-20">
         <table class="table-auto mt-10" v-for="theClass in classes" :key="theClass.id">
           <thead>
             <tr class="flex flex-wrap font-bold mb-1 border-b-2 border-gray-400">
@@ -22,9 +13,10 @@
           <tbody>
             <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="day in dayOfWeek" :key="day.id">
               <td class="w-64 font-semibold">{{ day.name }}</td>
-              <td class="w-56" v-for="(sub,i) in fullInitialTable[theClass.id -1][day.id-1]" :key="i"
-                :class="{'bg-red-200':sub.subject == null}">
-                {{ sub.oId }} {{ sub.subject }}
+              <td class="w-56" v-for="(sub,i) in fullInitialTable[theClass.id -1][day.id-1]" :key="i">
+                <button @click="addSubject(theClass, day, i)" class="btnClasses bg-gray-300 h-10">
+                  {{ sub.subject }} {{ sub.teacher != null && sub.teacher != "" ? '('+sub.teacher+')':'' }}
+                </button>
               </td>
             </tr>
           </tbody>
@@ -35,9 +27,11 @@
 
 <script>
 import data from '@/data/data'
+import Select from '../components/Select'
 export default {
     name:"InitialTable",
     mixins:[data],
+    components:{Select},
     props:{
       data:{
         type:Object,
@@ -46,18 +40,36 @@ export default {
     },
     data() {
         return {
-          showTable:false,
           initialTable:[],
-
           fullInitialTable:[],
 
-          errorsFound:[]
+
+          select:{showSelect:false,target:null,options:[],optionsShow:[],from:{day:null,sub:null}},
+          toSelectData:[]
         }
     },
     created() {
       this.addFullInitialTable();
     },
+    activated(){
+      this.addToTable();
+    },
     methods: {
+      addSubject(theClass,day,sub){
+        this.select.showSelect=true
+        this.select.target = this.data.userConfigBeforeChange
+        this.select.from = {day:day.id-1,sub:sub}
+        this.select.options = this.data.userConfigBeforeChange.filter(single => {
+          return single.theClass.id == theClass.id && !single.fixed.status
+        })
+        this.select.optionsShow = this.select.options.map(single => {
+          return single.subject.name + " ("+ single.teacher.name +")" + " ("+ single.size +")"
+        })
+      },
+      endSelect(){
+        Object.assign(this.$data.select,this.$options.data.call(this).select)
+        this.addToTable();
+      },
       addFullInitialTable(){
         for (let y = 0; y < this.classes.length; y++) {
           var theClass = this.classes[y];
@@ -91,7 +103,6 @@ export default {
       },
       addSubjectsToFullArray(){
         this.initialTable.forEach(singleSub => {
-          if(typeof singleSub.fixed != 'undefined' && singleSub.fixed.status)return true
           let notBreak = true
 
           this.fullInitialTable[singleSub.theClass.id -1].every(day => {
@@ -106,34 +117,9 @@ export default {
             })
               return notBreak
           });
-          if(notBreak){
-            this.errorsFound.push({
-              type:'Overloaded',
-              from:'subjects',
-              details:"class : "+singleSub.theClass.name + " ,Can't add to the table",
-              data:singleSub
-            })
-          }
-        });
-      },
-      chaeckTeacher(){
-        this.teachers.forEach(teacher => {
-          let teacherTable = this.initialTable.filter(data => {
-            return data.teacher.id == teacher.id
-          });
-          if (teacherTable.length > 30) {
-            this.errorsFound.push({
-              type:'Overloaded',
-              from:'teachers',
-              details:"teacher : "+teacher.name + " ,Can't add to the table",
-              data:teacher
-            })
-          }
         });
       },
       restartData(){
-        this.errorsFound = []
-        
         this.fullInitialTable.forEach(theClass => {
           theClass.forEach(day => {
             day.forEach(subInDay => {
@@ -143,7 +129,7 @@ export default {
           });
         })
       },
-      startCheckStetment(){
+      addToTable(){
         var endArray = []
         this.data.userConfigBeforeChange.forEach(element => {
           let size = element.size
@@ -156,14 +142,7 @@ export default {
         this.initialTable = endArray
         this.restartData();
         this.addFixedSubjects();
-        this.addSubjectsToFullArray();
-        this.chaeckTeacher();
-        this.showTable = true
       }
-    },
-    deactivated(){
-      this.showTable = false
-      this.restartData()
     }
 
 }

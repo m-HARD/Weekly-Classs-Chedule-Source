@@ -9,8 +9,8 @@ export default[
     
     {"theClass":{"id":2,"name":"الثاني","subInDay":6},"teacher":{"id":34,"name":"2"},"subject":{"id":14,"name":"نشاط"},"size":2,"duplication":true,"retail":2,"fixed":{"status":false,"location":null}},
     
-    {"theClass":{"id":2,"name":"الثاني","subInDay":6},"teacher":{"id":22,"name":"سحر"},"subject":{"id":3,"name":"رياضيات"},"size":8,"duplication":true,"retail":4,"fixed":{"status":false,"location":null}},
-    {"theClass":{"id":2,"name":"الثاني","subInDay":6},"teacher":{"id":22,"name":"سحر"},"subject":{"id":2,"name":"عربي"},"size":11,"duplication":true,"retail":4,"fixed":{"status":false,"location":null}},
+    {"theClass":{"id":2,"name":"الثاني","subInDay":6},"teacher":{"id":22,"name":"سحر"},"subject":{"id":3,"name":"رياضيات"},"size":8,"duplication":true,"retail":4,"fixed":{"status":false,"location":null},"isExemptions":true},
+    {"theClass":{"id":2,"name":"الثاني","subInDay":6},"teacher":{"id":22,"name":"سحر"},"subject":{"id":2,"name":"عربي"},"size":11,"duplication":true,"retail":4,"fixed":{"status":false,"location":null},"isExemptions":true},
 
     
     //class 3
@@ -26,7 +26,7 @@ export default[
     {"theClass":{"id":3,"name":"الثالث","subInDay":6},"teacher":{"id":26,"name":"ماجدة"},"subject":{"id":3,"name":"رياضيات"},"size":5,"duplication":true,"retail":2,"fixed":{"status":false,"location":null}},
     {"theClass":{"id":3,"name":"الثالث","subInDay":6},"teacher":{"id":35,"name":"3"},"subject":{"id":14,"name":"نشاط"},"size":2,"duplication":true,"retail":2,"fixed":{"status":false,"location":null}},
 
-    {"theClass":{"id":3,"name":"الثالث","subInDay":6},"teacher":{"id":22,"name":"سحر"},"subject":{"id":2,"name":"عربي"},"size":8,"duplication":true,"retail":3,"fixed":{"status":false,"location":null}},
+    {"theClass":{"id":3,"name":"الثالث","subInDay":6},"teacher":{"id":22,"name":"سحر"},"subject":{"id":2,"name":"عربي"},"size":8,"duplication":true,"retail":3,"fixed":{"status":false,"location":null},"isExemptions":true},
 
 
     //class 4

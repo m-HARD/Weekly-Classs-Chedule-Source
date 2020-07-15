@@ -6,12 +6,13 @@
           <span @click="currentView ='app-main-ui'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">Main</span>
           <span @click="currentView ='app-user-config-ui'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">User ConfigUI</span>
           <span @click="currentView ='fixed-subjects'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">Fixed Subjects</span>
+          <span @click="currentView ='teacher-exemptions'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">Teacher Exemptions</span>
           <span @click="currentView ='initial-table'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">Initial Table</span>
           <span @click="currentView ='app-view-some-data'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">some data</span>
         </nav>
         
         <keep-alive>
-          <component :is="currentView" :data="{subInClasses:subInClasses,userConfig:userConfig,userConfigBeforeChange:userConfigBeforeChange}"></component>
+          <component :is="currentView" :data="{subInClasses:subInClasses,userConfig:userConfig,userConfigBeforeChange:userConfigBeforeChange,teacherExemptions:teacherExemptions}"></component>
         </keep-alive>
 
 
@@ -28,6 +29,7 @@ import MainUI from './pages/MainUI'
 import UserConfigUI from './pages/UserConfigUI'
 import viewSomeData from './pages/ViewSomeData'
 import FixedSubjects from './pages/FixedSubjects'
+import TeacherExemptions from './pages/TeacherExemptions'
 import InitialTable from './pages/InitialTable'
 import Vue from 'vue'
 
@@ -35,6 +37,7 @@ import Vue from 'vue'
 Vue.component('app-main-ui',MainUI)
 Vue.component('app-user-config-ui',UserConfigUI)
 Vue.component('fixed-subjects',FixedSubjects)
+Vue.component('teacher-exemptions',TeacherExemptions)
 Vue.component('initial-table',InitialTable)
 Vue.component('app-view-some-data',viewSomeData)
 export default {
@@ -46,6 +49,7 @@ export default {
       subInClasses:[],
       userConfig:[],
       userConfigBeforeChange:DefulteUserConfig,
+      teacherExemptions:[{teacher:{id:22,name:'سحر'},locations:[{"day":5,"sub":3},{"day":5,"sub":2},{"day":5,"sub":1}]}]
     }
   },
   created() {

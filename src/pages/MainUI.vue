@@ -131,6 +131,19 @@ export default {
       });
       return hasNot;
     },
+    locationIsAnExemption(teacherId, day, sub){
+      let returnVal = true
+      let teacherExemptions = this.data.teacherExemptions.filter(teacherExemption => {
+        return teacherExemption.teacher.id == teacherId
+      });
+      teacherExemptions[0].locations.forEach(singleTeacherExemption => {
+        if (singleTeacherExemption.day == day && singleTeacherExemption.sub == sub) {
+          returnVal = false
+        }
+      })
+      
+      return returnVal
+    },
     addFixedSubjectsToClasses(){
       this.data.userConfig.filter(isFixed => {
         return isFixed.fixed.status
@@ -171,6 +184,12 @@ export default {
           }
           if (!data.data.duplication) {
             validation = validation && this.DayHasNoThisSubject(data.data.theClass.id, sc1.loc, data.data.subject.id)
+          }
+          if (typeof data.data.isExemptions != 'undefined' && data.data.isExemptions) {
+            validation = validation && this.locationIsAnExemption(data.teacherId, sc1.loc, sc1.data[randomSubInDay].loc)
+            if (data.data.size == 2) {
+              validation = validation && this.locationIsAnExemption(data.teacherId, sc1.loc, sc1.data[randomSubInDay +1].loc)
+            }
           }
         } while (!(validation));
 
