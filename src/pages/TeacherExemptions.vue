@@ -6,15 +6,15 @@
           <thead>
             <tr class="flex flex-wrap font-bold mb-1 border-b-2 border-gray-400">
               <td class="w-64 font-extrabold text-xl">استاذ {{ teacher.name }}</td>
-              <td class="w-56 font-semibold" v-for="(sub,i) in 8" :key="i">{{ subInDay[sub-1] }}</td>
+              <td class="w-56 font-semibold hover:bg-gray-200 cursor-pointer" @click.stop="exemptionReservationAllSub(teacher,sub-1)" v-for="(sub,i) in 8" :key="i" >{{ subInDay[sub-1] }}</td>
             </tr>
           </thead>
           <tbody>
             <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="day in dayOfWeek" :key="day.id">
-              <td class="w-64 font-semibold">{{ day.name }}</td>
+              <td class="w-64 font-semibold hover:bg-gray-200 cursor-pointer" @click.stop="exemptionReservationAllDay(teacher,day.id-1)">{{ day.name }}</td>
               <td class="w-56" v-for="(sub,i) in 8" :key="i">
-                <button class="btnClasses bg-gray-300 h-10" :class="{'bg-red-300':TeachersExemptionsShow[teacher.id -1][day.id-1][sub-1]}"
-                      @click="exemptionReservation(teacher,day.id-1,sub-1)" />
+                <button class="btnClasses bg-gray-300 hover:bg-gray-400 h-10" :class="{'bg-red-300':TeachersExemptionsShow[teacher.id -1][day.id-1][sub-1]}"
+                      @click.stop="exemptionReservation(teacher,day.id-1,sub-1)" />
               </td>
             </tr>
           </tbody>
@@ -60,7 +60,7 @@ export default {
     },
     methods: {
       TeacherExemptionsIsFound(teacherId){
-        let teacherExemptions = this.TeachersExemptions.filter(teacherExemption => {
+        let teacherExemptions = this.data.teacherExemptions.filter(teacherExemption => {
           return teacherExemption.teacher.id == teacherId
         });
         if (teacherExemptions.length >= 1) {
@@ -89,6 +89,16 @@ export default {
           }
         })
       },
+      exemptionReservationAllDay(teacher,day){
+        for (let sub = 0; sub < 8; sub++) {
+          this.exemptionReservation(teacher,day,sub)
+        }
+      },
+      exemptionReservationAllSub(teacher,sub){
+        this.dayOfWeek.forEach(day => {
+          this.exemptionReservation(teacher,day.id -1,sub)
+        })
+      },
       exemptionReservation(teacher,day,sub){
         let teacherExemptions = this.TeacherExemptionsIsFound(teacher.id)
 
@@ -114,6 +124,19 @@ export default {
             this.$set(this.TeachersExemptionsShow[teacher.id -1][day], sub, true)
             teacherExemptions.locations.push({day:day,sub:sub})
           }
+        }else{
+          this.data.userConfigBeforeChange.filter(data => {
+            return data.teacher.id == teacher.id
+          }).map(data => {
+            data.isExemptions = true
+          })
+
+          this.$set(this.TeachersExemptionsShow[teacher.id -1][day], sub, true)
+          this.data.teacherExemptions.push({
+            teacher:teacher,
+            locations:[{"day":day,"sub":sub}]
+          })
+
         }
 
       }
