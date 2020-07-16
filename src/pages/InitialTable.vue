@@ -23,7 +23,7 @@
             <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="day in dayOfWeek" :key="day.id">
               <td class="w-64 font-semibold">{{ day.name }}</td>
               <td class="w-56" v-for="(sub,i) in fullInitialTable[theClass.id -1][day.id-1]" :key="i"
-                :class="{'bg-red-200':sub.subject == null,'opacity-50':!sub.fixed && sub.subject != null}">
+                :class="{'bg-red-200':sub.subject == null,'bg-green-300':sub.fixed,'bg-red-500':theClassHasError(theClass.id)}">
                 {{ sub.subject }} {{ sub.teacher != null && sub.teacher != "" ? '('+sub.teacher+')':'' }}
               </td>
             </tr>
@@ -58,6 +58,16 @@ export default {
       this.addFullInitialTable();
     },
     methods: {
+      theClassHasError(classId){
+        let returnVal = false
+        this.errorsFound.forEach(element => {
+          if (typeof element.data != 'undefined' && element.data.theClass.id == classId) {
+            returnVal = true
+          }
+        });
+
+        return returnVal
+      },
       addFullInitialTable(){
         for (let y = 0; y < this.classes.length; y++) {
           var theClass = this.classes[y];
