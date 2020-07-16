@@ -23,8 +23,8 @@
             <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="day in dayOfWeek" :key="day.id">
               <td class="w-64 font-semibold">{{ day.name }}</td>
               <td class="w-56" v-for="(sub,i) in fullInitialTable[theClass.id -1][day.id-1]" :key="i"
-                :class="{'bg-red-200':sub.subject == null}">
-                {{ sub.oId }} {{ sub.subject }}
+                :class="{'bg-red-200':sub.subject == null,'opacity-50':!sub.fixed && sub.subject != null}">
+                {{ sub.subject }} {{ sub.teacher != null && sub.teacher != "" ? '('+sub.teacher+')':'' }}
               </td>
             </tr>
           </tbody>
@@ -69,7 +69,8 @@ export default {
               sub.push({
                   oId:[y,x,i],
                   subject:null,
-                  teacher:null
+                  teacher:null,
+                  fixed:false
                 })
             }
             subInClass.push(sub)
@@ -85,6 +86,7 @@ export default {
   
               subject.subject = singleSub.subject.name
               subject.teacher = singleSub.teacher.name
+              subject.fixed = true
             }
           }
         })
