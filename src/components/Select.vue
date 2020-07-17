@@ -56,13 +56,14 @@ export default {
                     return data.subject.id == isExist[0].subject.id && data.teacher.id == isExist[0].teacher.id
                 })
                 let index = this.data.target.indexOf(isExist[0])
-                
 
-                if (theParent.length == 1) {
-                    theParent[0].size += 1
-                }else{
-                    isExist[0].fixed ={"status":false,"location":null}
-                    this.data.target.push(isExist[0])
+                if (id != null) {
+                    if (theParent.length == 1) {
+                        theParent[0].size += 1
+                    }else{
+                        isExist[0].fixed ={"status":false,"location":null}
+                        this.data.target.push(isExist[0])
+                    }
                 }
                 
                 this.data.target.splice(index,1)
@@ -70,7 +71,9 @@ export default {
             
             if (id == null && isExist.length == 1) {
                 console.log("Delete Successfully");
+                console.log("#1");
             }else if (id == null) {
+                console.log("#2");
                 let itemAdd = Object.assign({}, this.data.options[0])
                 if (typeof itemAdd != 'undefined') {
                     itemAdd.subject = {"id":0,"name":"فراغ"}
