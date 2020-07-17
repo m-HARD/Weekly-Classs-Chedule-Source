@@ -54,7 +54,7 @@ export default {
           errorsFound:[]
         }
     },
-    created() {
+    activated() {
       this.addFullInitialTable();
     },
     methods: {
@@ -69,6 +69,7 @@ export default {
         return returnVal
       },
       addFullInitialTable(){
+        this.fullInitialTable=[]
         for (let y = 0; y < this.classes.length; y++) {
           var theClass = this.classes[y];
           var subInClass = []
