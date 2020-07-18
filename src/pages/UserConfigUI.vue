@@ -340,7 +340,9 @@ export default {
             subject: Input.subject,
             size: Input.size,
             duplication: Input.duplication,
-            retail: Input.retailType
+            retail: Input.retailType,
+            fixed: {"status":false,"location":null},
+            isExemptions:false
         })
         Input.teacher = null;
         Input.subject = null;
