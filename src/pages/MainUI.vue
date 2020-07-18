@@ -2,6 +2,8 @@
   <div class="l16 bg-gray-100 min-h-screen" dir="rtl">
     <div class="p-5 mx-10">
 
+      <div v-if="showLoad" class="fixed inset-0 bg-black opacity-50"></div>
+
       <div class="w-full flex justify-center">
         <button class="p-2 mt-5 mx-5 bg-gray-400 rounded hover:bg-gray-500 focus:outline-none cursor-pointer"
           @click="addSubjectToAllClass()">Random</button>
@@ -64,6 +66,7 @@ export default {
   },
   data() {
     return {
+      showLoad:false,
       iCanNotAddIt:[],
       bestDistribution:{data:null,canNotAddLength:null},
 
@@ -225,6 +228,7 @@ export default {
       }
     },
     addSubjectToAllClass(){
+      this.showLoad = true;
       this.restartData();
 
       //this.addSubjectToSpecificallyClass(5)
@@ -323,6 +327,7 @@ export default {
           }
       }
       theAllSubjectTry = 0
+      this.showLoad = false;
     },
     restartData(){
       for (let i = 0; i < this.iCanNotAddIt.length; i++) {
