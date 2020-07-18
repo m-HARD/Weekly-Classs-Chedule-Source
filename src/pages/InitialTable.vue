@@ -134,12 +134,20 @@ export default {
           let teacherTable = this.initialTable.filter(data => {
             return data.teacher.id == teacher.id
           });
-          if (teacherTable.length > 30) {
+          let totalExemptions = 0
+          let teacherExemptions = this.data.teacherExemptions.filter(data => {
+            console.log(teacher,data.teacher);
+            return data.teacher.id == teacher.id
+          });
+          if (teacherExemptions.length > 0) {
+            totalExemptions = teacherExemptions[0].locations.length
+          }
+
+          if (teacherTable.length + totalExemptions > 30) {
             this.errorsFound.push({
               type:'Overloaded',
               from:'teachers',
-              details:"teacher : "+teacher.name + " ,Can't add to the table",
-              data:teacher
+              details:"teacher : "+teacher.name + " ,Can't add to the table"
             })
           }
         });
