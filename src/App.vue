@@ -94,17 +94,11 @@ export default {
 
 
     runSortFunctions(){
-        console.log("#1");
         this.sortUserConfigBySubject()
-        console.log("#2");
         this.sortUserConfigByClass()
-        console.log("#3");
         this.sortUserConfigByTeatcherCount()
-        console.log("#4");
         this.sortUserConfigByDuplication()
-        console.log("#5");
         this.sortUserConfigBySize()
-        console.log("#6");
         this.sortUserConfigByExemptions()
         this.sortUserConfigByFixed()
     },

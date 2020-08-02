@@ -13,7 +13,7 @@
             <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="day in dayOfWeek" :key="day.id">
               <td class="w-64 font-semibold hover:bg-gray-200 cursor-pointer" @click.stop="exemptionReservationAllDay(teacher,day.id-1)">{{ day.name }}</td>
               <td class="w-56" v-for="(sub,i) in 8" :key="i">
-                <button class="btnClasses bg-gray-300 hover:bg-gray-400 h-10" :class="{'bg-red-300':TeachersExemptionsShow[teacher.id -1][day.id-1][sub-1]}"
+                <button class="btnClasses h-10" :class="TeachersExemptionsShow[teacher.id -1][day.id-1][sub-1]? 'bg-red-300 hover:bg-red-400':'bg-gray-300 hover:bg-gray-400'"
                       @click.stop="exemptionReservation(teacher,day.id-1,sub-1)" />
               </td>
             </tr>
@@ -100,6 +100,7 @@ export default {
         })
       },
       exemptionReservation(teacher,day,sub){
+
         let teacherExemptions = this.TeacherExemptionsIsFound(teacher.id)
 
         if (teacherExemptions) {

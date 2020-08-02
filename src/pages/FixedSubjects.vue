@@ -5,7 +5,7 @@
       <div class="w-full mt-20">
         <table class="table-auto mt-10" v-for="theClass in classes" :key="theClass.id">
           <thead>
-            <tr class="flex flex-wrap font-bold mb-1 border-b-2 border-gray-400">
+            <tr class="flex flex-wrap font-bold border-b-2 border-gray-400">
               <td class="w-64 font-extrabold text-xl">الصف {{ theClass.name }}</td>
               <td class="w-56 font-semibold" v-for="(sub,i) in theClass.subInDay" :key="i">{{ subInDay[sub-1] }}</td>
             </tr>
