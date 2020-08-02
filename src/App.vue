@@ -1,7 +1,6 @@
 <template>
   <div name="App" style="min-width: -webkit-fill-available;width: max-content;">
-    <div class="bg-gray-100 min-h-screen" dir="rtl">
-      <div class="p-5 mx-10">
+    <div class="bg-gray-200 min-h-screen" dir="rtl">
         <nav class="w-full py-2 flex justify-center bg-gray-600">
           <span @click="currentView ='app-main-ui'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">Main</span>
           <span @click="currentView ='app-user-config-ui'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">User ConfigUI</span>
@@ -11,20 +10,21 @@
           <span @click="currentView ='app-view-some-data'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">some data</span>
         </nav>
         
+        
         <keep-alive>
           <component :is="currentView" :data="{subInClasses:subInClasses,userConfig:userConfig,userConfigBeforeChange:userConfigBeforeChange,teacherExemptions:teacherExemptions}"></component>
         </keep-alive>
 
-
-      </div>
     </div>
   </div>
 </template>
+
 
 <script>
 import { eventBus } from './main'
 import DefulteUserConfig from '@/data/DefulteUserConfig'
 import data from './data/data'
+import HomePage from './pages/HomePage'
 import MainUI from './pages/MainUI'
 import UserConfigUI from './pages/UserConfigUI'
 import viewSomeData from './pages/ViewSomeData'
@@ -34,6 +34,7 @@ import InitialTable from './pages/InitialTable'
 import Vue from 'vue'
 
 
+Vue.component('home-page',HomePage)
 Vue.component('app-main-ui',MainUI)
 Vue.component('app-user-config-ui',UserConfigUI)
 Vue.component('fixed-subjects',FixedSubjects)
@@ -45,7 +46,7 @@ export default {
   mixins:[data],
   data() {
     return {
-      currentView:'app-main-ui',
+      currentView:'home-page',
       subInClasses:[],
       userConfig:[],
       userConfigBeforeChange:DefulteUserConfig,
@@ -54,6 +55,9 @@ export default {
   },
   created() {
     this.addSubInClass()
+    eventBus.$on('ChangeUrl',(data)=>{
+      this.currentView = data
+    })
     eventBus.$on('retailUserConfig',(data)=>{
       this.userConfig = data
     })
