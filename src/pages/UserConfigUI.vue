@@ -19,56 +19,6 @@
       </div>
   
       <div class="w-full mt-20">
-
-        <table class="table-auto mt-10">
-          <thead>
-            <tr class="flex flex-wrap font-bold mb-1 border-b-2 border-gray-400 items-center">
-              <td class="w-20 font-extrabold text-xl"></td>
-              <td class="w-32 font-extrabold text-xl">الصف</td>
-              <td class="w-32 font-extrabold text-xl">المادة</td>
-              <td class="w-32 font-extrabold text-xl">الأستاذ</td>
-              <td class="w-32 font-extrabold text-xl text-center">العدد</td>
-              <td class="w-32 font-extrabold text-xl">طريقة التوزيع</td>
-              <td class="w-48 font-extrabold text-xl">امكانية وجود نفس المادة في مكانين مختلفين ويوم واحد</td>
-              <td class="w-32 font-extrabold text-xl text-center">حذف</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="(userconfig,i) in data.userConfigBeforeChange" :key="i">
-              <td class="w-20 font-semibold">{{ i+1 }}</td>
-              <td class="w-32 font-semibold">{{ userconfig.theClass.name }}</td>
-              <td class="w-32 font-semibold">{{ userconfig.subject.name }}</td>
-              <td class="w-32 font-semibold">{{ userconfig.teacher.name }}</td>
-              <td class="w-32 font-semibold text-center">{{ userconfig.size }}</td>
-              <td class="w-32 font-semibold">{{ retailTypes[userconfig.retail] }}</td>
-              <td class="w-48 font-semibold text-center">{{ userconfig.duplication ? 'نعم':'لا' }}</td>
-              <td class="w-32 font-semibold text-center">
-                <span @click="DeleteFromuserConfigBeforeChange(i)" class="text-red-500 cursor-pointer">X</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-      </div>
-
-      <div class="w-full flex justify-center mt-10">
-        <button class="p-2 mt-5 mx-5 bg-gray-400 rounded hover:bg-gray-500 focus:outline-none cursor-pointer"
-          @click="retailUserConfig('all')">retail user config</button>
-        <button class="p-2 mt-5 mx-5 bg-gray-400 rounded hover:bg-gray-500 focus:outline-none cursor-pointer"
-          @click="retailUserConfig('class',5)">retail user config by class</button>
-      </div>
-
-      <div class="mt-10">
-        after change :
-        <ul v-for="(userconfig,i) in data.userConfig" :key="i">
-          <li>{{ userconfig }}</li>
-        </ul>
-      </div>
-
-
-
-
-      <div>
         <form class='flex justify-center mt-20' @submit.prevent="addToUserConfig()">
             <div class='w-full max-w-2xl bg-white rounded-lg p-6'>
                 <div class='flex flex-wrap -mx-3'>
@@ -156,7 +106,55 @@
                 </div>
             </div>
         </form>
+
+        <table class="table-auto mt-10">
+          <thead>
+            <tr class="flex flex-wrap font-bold mb-1 border-b-2 border-gray-400 items-center">
+              <td class="w-20 font-extrabold text-xl"></td>
+              <td class="w-32 font-extrabold text-xl">الصف</td>
+              <td class="w-32 font-extrabold text-xl">المادة</td>
+              <td class="w-32 font-extrabold text-xl">الأستاذ</td>
+              <td class="w-32 font-extrabold text-xl text-center">العدد</td>
+              <td class="w-32 font-extrabold text-xl">طريقة التوزيع</td>
+              <td class="w-48 font-extrabold text-xl">امكانية وجود نفس المادة في مكانين مختلفين ويوم واحد</td>
+              <td class="w-32 font-extrabold text-xl text-center">حذف</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="(userconfig,i) in data.userConfigBeforeChange" :key="i">
+              <td class="w-20 font-semibold">{{ i+1 }}</td>
+              <td class="w-32 font-semibold">{{ userconfig.theClass.name }}</td>
+              <td class="w-32 font-semibold">{{ userconfig.subject.name }}</td>
+              <td class="w-32 font-semibold">{{ userconfig.teacher.name }}</td>
+              <td class="w-32 font-semibold text-center">{{ userconfig.size }}</td>
+              <td class="w-32 font-semibold">{{ retailTypes[userconfig.retail] }}</td>
+              <td class="w-48 font-semibold text-center">{{ userconfig.duplication ? 'نعم':'لا' }}</td>
+              <td class="w-32 font-semibold text-center">
+                <span @click="DeleteFromuserConfigBeforeChange(i)" class="text-red-500 cursor-pointer">X</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
       </div>
+
+      <div class="w-full flex justify-center mt-10">
+        <button class="p-2 mt-5 mx-5 bg-gray-400 rounded hover:bg-gray-500 focus:outline-none cursor-pointer"
+          @click="retailUserConfig('all')">retail user config</button>
+        <button class="p-2 mt-5 mx-5 bg-gray-400 rounded hover:bg-gray-500 focus:outline-none cursor-pointer"
+          @click="retailUserConfig('class',5)">retail user config by class</button>
+      </div>
+
+      <div class="mt-10">
+        after change :
+        <ul v-for="(userconfig,i) in data.userConfig" :key="i">
+          <li>{{ userconfig }}</li>
+        </ul>
+      </div>
+
+
+
+
 
   </div>
 </template>
