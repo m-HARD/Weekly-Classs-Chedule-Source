@@ -31,7 +31,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="day in dayOfWeek" :key="day.id">
+            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="day in data.mainData.dayOfWeek" :key="day.id">
               <td class="w-64 font-semibold">{{ day.name }}</td>
               <td class="w-56" :style="sub.subject.name != null ?{'background-color':colorDefulte == 0 ? colors[(sub.subject.id -1) %30]:colorDefulte == 1 ? colors[(sub.teacher.id -1) %30]:sub.teacher.id == 22  || sub.subject.name == 'عربي' ? colors[0]:''}:''"
                v-for="(sub,i) in data.subInClasses[theClass.id -1][day.id-1]" :key="i">

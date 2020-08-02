@@ -14,7 +14,7 @@
         
         
         <keep-alive>
-          <component :is="currentView" :data="{subInClasses:subInClasses,userConfig:userConfig,userConfigBeforeChange:userConfigBeforeChange,teacherExemptions:teacherExemptions}"></component>
+          <component :is="currentView" :data="{subInClasses:subInClasses,userConfig:userConfig,userConfigBeforeChange:userConfigBeforeChange,teacherExemptions:teacherExemptions,mainData:mainData}"></component>
         </keep-alive>
 
     </div>
@@ -56,7 +56,17 @@ export default {
       subInClasses:[],
       userConfig:[],
       userConfigBeforeChange:DefulteUserConfig,
-      teacherExemptions:[{teacher:{id:22,name:'سحر'},locations:[{"day":5,"sub":3},{"day":5,"sub":2},{"day":5,"sub":1}]}]
+      teacherExemptions:[{teacher:{id:22,name:'سحر'},locations:[{"day":5,"sub":3},{"day":5,"sub":2},{"day":5,"sub":1}]}],
+      mainData:{
+        dayOfWeek:[
+                {id:1,name:'السبت'},
+                {id:2,name:'الأحد'},
+                {id:3,name:'الأثنين'},
+                {id:4,name:'الثلاثاء'},
+                {id:5,name:'الأربعاء'},
+                {id:6,name:'الخميس'},
+            ],
+      }
     }
   },
   created() {
@@ -67,6 +77,9 @@ export default {
     eventBus.$on('retailUserConfig',(data)=>{
       this.userConfig = data
       this.runSortFunctions()
+    })
+    eventBus.$on('addToDayOfWeek',(data)=>{
+        this.mainData.dayOfWeek.push(data)
     })
   },
   methods: {

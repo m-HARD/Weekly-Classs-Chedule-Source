@@ -13,16 +13,16 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="flex flex-wrap border-b-2 border-gray-300 bg-white hover:bg-gray-300" v-for="(day,i) in dayOfWeek" :key="i">
+            <tr class="flex flex-wrap border-b-2 border-gray-300 bg-white hover:bg-gray-300" v-for="(day,i) in data.mainData.dayOfWeek" :key="i">
               <td class="w-20 font-semibold px-2">{{ i+1 }}</td>
               <td class="w-32 font-semibold">{{ day.name }}</td>
               <td class="w-32 font-semibold text-center">
-                <span @click="dayOfWeek.splice(index,1)" class="text-red-500 cursor-pointer">X</span>
+                <span @click="data.mainData.dayOfWeek.splice(index,1)" class="text-red-500 cursor-pointer">X</span>
               </td>
             </tr>
             <tr class="flex flex-wrap border-b-2 border-gray-300 bg-white">
               <td class="w-20 font-semibold px-2"></td>
-              <td class="w-32 font-semibold"><input type="text" v-model="dayInput" class="w-full h-full bg-gray-400 p-1"></td>
+              <td class="w-32 font-semibold"><input type="text" v-model="userInput.dayInput" class="w-full h-full bg-gray-400 p-1"></td>
               <td class="w-32 font-semibold text-center flex items-center">
                 <span @click="AddDay" class="bg-green-400 hover:bg-green-500 w-full py-1 rounded-md cursor-pointer">أضافة</span>
               </td>
@@ -39,6 +39,7 @@
 
 <script>
 import data from '@/data/data'
+import { eventBus } from '@/main'
 
 export default {
   name: 'viewSomeData',
@@ -58,19 +59,16 @@ export default {
   },
   methods: {
       AddDay(){
-        if(this.dayInput == null)return
-        let lastId = Math.max(...this.dayOfWeek.map(day=>{
+        if(this.userInput.dayInput == null)return
+        let lastId = Math.max(...this.data.mainData.dayOfWeek.map(day=>{
             return day.id
         }))
-        console.log(this.dayOfWeek.map(day=>{
-            return day.id
-        }));
-        alert(lastId)
-        this.dayOfWeek.push({
+        let endArray = {
               id:lastId+1,
-              name:this.dayInput
-        })
-        this.dayInput = null
+              name:this.userInput.dayInput
+        }
+        eventBus.$emit('addToDayOfWeek',endArray)
+        this.userInput.dayInput = null
       }
   },
 }
