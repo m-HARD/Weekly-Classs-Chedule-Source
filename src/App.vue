@@ -4,6 +4,7 @@
         <nav class="w-full py-2 flex justify-center bg-gray-600">
           <span @click="currentView ='test'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">test</span>
           <span @click="currentView ='app-main-ui'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">Main</span>
+          <span @click="currentView ='add-main-data'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">Add Main Data</span>
           <span @click="currentView ='app-user-config-ui'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">User ConfigUI</span>
           <span @click="currentView ='fixed-subjects'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">Fixed Subjects</span>
           <span @click="currentView ='teacher-exemptions'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">Teacher Exemptions</span>
@@ -28,6 +29,7 @@ import data from './data/data'
 import HomePage from './pages/HomePage'
 import Test from './pages/Test'
 import MainUI from './pages/MainUI'
+import AddMainData from './pages/AddMainData'
 import UserConfigUI from './pages/UserConfigUI'
 import viewSomeData from './pages/ViewSomeData'
 import FixedSubjects from './pages/FixedSubjects'
@@ -39,6 +41,7 @@ import Vue from 'vue'
 Vue.component('home-page',HomePage)
 Vue.component('test',Test)
 Vue.component('app-main-ui',MainUI)
+Vue.component('add-main-data',AddMainData)
 Vue.component('app-user-config-ui',UserConfigUI)
 Vue.component('fixed-subjects',FixedSubjects)
 Vue.component('teacher-exemptions',TeacherExemptions)
