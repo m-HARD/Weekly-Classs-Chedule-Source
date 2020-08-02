@@ -100,7 +100,7 @@
           </thead>
           <tbody>
             <tr class="flex flex-wrap border-b-2 border-gray-300 bg-white hover:bg-gray-300" v-for="(userconfig,i) in data.userConfigBeforeChange" :key="i">
-              <td class="w-20 font-semibold">{{ i+1 }}</td>
+              <td class="w-20 font-semibold px-2">{{ i+1 }}</td>
               <td class="w-32 font-semibold">{{ userconfig.theClass.name }}</td>
               <td class="w-32 font-semibold">{{ userconfig.subject.name }}</td>
               <td class="w-32 font-semibold">{{ userconfig.teacher.name }}</td>
