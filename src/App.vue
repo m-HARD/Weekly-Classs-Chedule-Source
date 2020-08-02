@@ -2,6 +2,7 @@
   <div name="App" style="min-width: -webkit-fill-available;width: max-content;">
     <div class="bg-gray-200 min-h-screen" dir="rtl">
         <nav class="w-full py-2 flex justify-center bg-gray-600">
+          <span @click="currentView ='test'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">test</span>
           <span @click="currentView ='app-main-ui'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">Main</span>
           <span @click="currentView ='app-user-config-ui'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">User ConfigUI</span>
           <span @click="currentView ='fixed-subjects'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">Fixed Subjects</span>
@@ -25,6 +26,7 @@ import { eventBus } from './main'
 import DefulteUserConfig from '@/data/DefulteUserConfig'
 import data from './data/data'
 import HomePage from './pages/HomePage'
+import Test from './pages/Test'
 import MainUI from './pages/MainUI'
 import UserConfigUI from './pages/UserConfigUI'
 import viewSomeData from './pages/ViewSomeData'
@@ -35,6 +37,7 @@ import Vue from 'vue'
 
 
 Vue.component('home-page',HomePage)
+Vue.component('test',Test)
 Vue.component('app-main-ui',MainUI)
 Vue.component('app-user-config-ui',UserConfigUI)
 Vue.component('fixed-subjects',FixedSubjects)
@@ -60,6 +63,7 @@ export default {
     })
     eventBus.$on('retailUserConfig',(data)=>{
       this.userConfig = data
+      this.runSortFunctions()
     })
   },
   methods: {
@@ -85,6 +89,81 @@ export default {
         }
         this.subInClasses.push(subInClass)
       }
+    },
+
+
+
+    runSortFunctions(){
+        console.log("#1");
+        this.sortUserConfigBySubject()
+        console.log("#2");
+        this.sortUserConfigByClass()
+        console.log("#3");
+        this.sortUserConfigByTeatcherCount()
+        console.log("#4");
+        this.sortUserConfigByDuplication()
+        console.log("#5");
+        this.sortUserConfigBySize()
+        console.log("#6");
+        this.sortUserConfigByExemptions()
+        this.sortUserConfigByFixed()
+    },
+    
+    sortUserConfigBySubject(){
+      this.userConfig.sort(function (a,b) {
+          return ((a.subject.id == b.subject.id) ? 0 : ((a.subject.id > b.subject.id) ? 1 : -1 ));       
+      }.bind(this));
+    },
+    sortUserConfigByClass(){
+      this.userConfig.sort(function (a,b) {
+          return ((a.theClass.id == b.theClass.id) ? 0 : ((a.theClass.id > b.theClass.id) ? 1 : -1 ));       
+      }.bind(this));
+    },
+    userDataBy(by,id){
+        if (by == "class") {
+          return this.userConfig.filter((data)=>{
+            return data.theClass.id == id
+          })
+        }else if (by == "teacher") {
+          return this.userConfig.filter((data)=>{
+            return data.teacher.id == id
+          })
+        }else if (by == "subject") {
+          return this.userConfig.filter((data)=>{
+            return data.subject.id == id
+          })
+        }
+  
+        return []
+      },
+    sortUserConfigByTeatcherCount(){
+      this.userConfig.sort(function (a,b) {
+
+          var sortA = this.userDataBy('teacher',a.teacher.id).length
+          var sortB = this.userDataBy('teacher',b.teacher.id).length
+
+          return ((sortA == sortB) ? 0 : ((sortA < sortB) ? 1 : -1 ));
+      }.bind(this));
+    },
+    sortUserConfigByDuplication(){
+      this.userConfig.sort(function (a,b) {
+          return ((a.duplication == b.duplication) ? 0 : ((a.duplication > b.duplication) ? 1 : -1 ));       
+      }.bind(this));
+    },
+    sortUserConfigBySize(){
+      this.userConfig.sort(function (a,b) {
+          return ((a.size == b.size) ? 0 : ((a.size < b.size) ? 1 : -1 ));       
+      }.bind(this));
+    },
+    sortUserConfigByExemptions(){
+      this.userConfig.sort(function (a,b) {
+          return ((a.isExemptions == b.isExemptions) ? 0 : ((a.isExemptions < b.isExemptions) ? 1 : -1 ));       
+      }.bind(this));
+    },
+    sortUserConfigByFixed(){
+      this.userConfig.sort(function (a,b) {
+          return ((a.fixed.status == b.fixed.status) ? 0 : ((a.fixed.status < b.fixed.status) ? 1 : -1 ));       
+      }.bind(this));
     },
   },
 }
