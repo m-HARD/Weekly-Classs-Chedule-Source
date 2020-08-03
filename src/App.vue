@@ -59,13 +59,23 @@ export default {
       teacherExemptions:[{teacher:{id:22,name:'سحر'},locations:[{"day":5,"sub":3},{"day":5,"sub":2},{"day":5,"sub":1}]}],
       mainData:{
         dayOfWeek:[
-                {id:1,name:'السبت'},
-                {id:2,name:'الأحد'},
-                {id:3,name:'الأثنين'},
-                {id:4,name:'الثلاثاء'},
-                {id:5,name:'الأربعاء'},
-                {id:6,name:'الخميس'},
-            ],
+          {id:1,name:'السبت'},
+          {id:2,name:'الأحد'},
+          {id:3,name:'الأثنين'},
+          {id:4,name:'الثلاثاء'},
+          {id:5,name:'الأربعاء'},
+          {id:6,name:'الخميس'},
+        ],
+        classes:[
+          {id:1,name:'الأول',subInDay:6},
+          {id:2,name:'الثاني',subInDay:6},
+          {id:3,name:'الثالث',subInDay:6},
+          {id:4,name:'الرابع',subInDay:7},
+          {id:5,name:'الخامس',subInDay:7},
+          {id:6,name:'السادس',subInDay:7},
+          {id:7,name:'السابع',subInDay:7},
+          {id:8,name:'الثامن',subInDay:8},
+        ],
       }
     }
   },
@@ -77,9 +87,6 @@ export default {
     eventBus.$on('retailUserConfig',(data)=>{
       this.userConfig = data
       this.runSortFunctions()
-    })
-    eventBus.$on('addToDayOfWeek',(data)=>{
-        this.mainData.dayOfWeek.push(data)
     })
   },
   methods: {
