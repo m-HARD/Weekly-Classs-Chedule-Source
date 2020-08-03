@@ -10,7 +10,7 @@
                         <label class='lableClasses'>الأستاذ</label>
                         <div class='relative'>
                             <select v-model="userInput.teacher" class='selectClasses'>
-                                <option v-for="(teacher,index) in teachers" :value="teacher" :key="index">{{ teacher.name }}</option>
+                                <option v-for="(teacher,index) in data.mainData.teachers" :value="teacher" :key="index">{{ teacher.name }}</option>
                             </select>
                             <div v-html="svg()" />
                         </div>
@@ -19,7 +19,7 @@
                         <label class='lableClasses'>المادة</label>
                         <div class='relative'>
                             <select v-model="userInput.subject" class='selectClasses'>
-                                <option v-for="(subject,index) in subjects" :key="index" :value="subject" v-text="subject.name"></option>
+                                <option v-for="(subject,index) in data.mainData.subjects" :key="index" :value="subject" v-text="subject.name"></option>
                             </select>
                             <div v-html="svg()" />
                         </div>
@@ -28,7 +28,7 @@
                         <label class='lableClasses'>الفصل</label>
                         <div class='relative'>
                             <select v-model="userInput.theClass" class='selectClasses'>
-                                <option v-for="(theClass,index) in classes" :key="index" :value="theClass" v-text="theClass.name"></option>
+                                <option v-for="(theClass,index) in data.mainData.classes" :key="index" :value="theClass" v-text="theClass.name"></option>
                             </select>
                             <div v-html="svg()" />
                         </div>
@@ -122,11 +122,9 @@
 </template>
 
 <script>
-import data from '@/data/data'
 
 export default {
   name: 'viewSomeData',
-  mixins:[data],
   props:{
     data:{
       type:Object,
@@ -171,6 +169,15 @@ export default {
         Input.duplication = null;
         Input.retailType = null;
         Input.duplication = false;
+    },
+    svg(){
+      return `
+        <div class='pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700'>
+            <svg class='fill-current h-4 w-4' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'>
+                <path d='M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z'/>
+            </svg>
+        </div>
+      `;
     }
   }
 }
