@@ -3,7 +3,7 @@
       <Select v-if="select.showSelect" type="fixedSub" :data="{target:select.target,options:select.options,optionsShow:select.optionsShow,from:select.from}" @end="endSelect()"/>
 
       <div class="w-full mt-20">
-        <table class="table-auto mt-10" v-for="theClass in classes" :key="theClass.id">
+        <table class="table-auto mt-10" v-for="theClass in data.mainData.classes" :key="theClass.id">
           <thead>
             <tr class="flex flex-wrap font-bold border-b-2 border-gray-400">
               <td class="w-64 font-extrabold text-xl">الصف {{ theClass.name }}</td>
@@ -11,7 +11,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="day in dayOfWeek" :key="day.id">
+            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="day in data.mainData.dayOfWeek" :key="day.id">
               <td class="w-64 font-semibold">{{ day.name }}</td>
               <td class="w-56" v-for="(sub,i) in fullInitialTable[theClass.id -1][day.id-1]" :key="i">
                 <button @click="addSubject(theClass, day, i)" class="btnClasses bg-gray-300 h-10">
@@ -71,8 +71,8 @@ export default {
         this.addToTable();
       },
       addFullInitialTable(){
-        for (let y = 0; y < this.classes.length; y++) {
-          var theClass = this.classes[y];
+        for (let y = 0; y < this.data.mainData.classes.length; y++) {
+          var theClass = this.data.mainData.classes[y];
           var subInClass = []
           
           for (let x = 0; x < this.dayOfWeek.length; x++) {

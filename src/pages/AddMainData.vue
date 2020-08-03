@@ -36,7 +36,8 @@
             <thead>
               <tr class="flex flex-wrap font-bold border-b-2 border-gray-400 items-center bg-gray-400">
                 <td class="w-20 font-extrabold text-xl"></td>
-                <td class="w-32 font-extrabold text-xl">عدد ايام الأسبوع</td>
+                <td class="w-32 font-extrabold text-xl">الصف</td>
+                <td class="w-32 font-extrabold text-xl">عدد الحصص</td>
                 <td class="w-32 font-extrabold text-xl text-center">حذف</td>
               </tr>
             </thead>
@@ -44,6 +45,7 @@
               <tr class="flex flex-wrap border-b-2 border-gray-300 bg-white hover:bg-gray-300" v-for="(day,i) in data.mainData.classes" :key="i">
                 <td class="w-20 font-semibold px-2">{{ i+1 }}</td>
                 <td class="w-32 font-semibold">{{ day.name }}</td>
+                <td class="w-32 font-semibold">{{ day.subInDay }}</td>
                 <td class="w-32 font-semibold text-center">
                   <span @click="data.mainData.classes.splice(i,1)" class="text-red-500 cursor-pointer">X</span>
                 </td>
@@ -51,6 +53,7 @@
               <tr class="flex flex-wrap border-b-2 border-gray-300 bg-white">
                 <td class="w-20 font-semibold px-2"></td>
                 <td class="w-32 font-semibold"><input type="text" v-model="userInput.classInput" class="w-full h-full bg-gray-400 p-1"></td>
+                <td class="w-32 font-semibold"><input type="text" v-model.number="userInput.classsubInDayInput" class="w-full h-full bg-gray-400 p-1"></td>
                 <td class="w-32 font-semibold text-center flex items-center">
                   <span @click="AddClass" class="bg-green-400 hover:bg-green-500 w-full py-1 rounded-md cursor-pointer">أضافة</span>
                 </td>
@@ -64,7 +67,7 @@
             <thead>
               <tr class="flex flex-wrap font-bold border-b-2 border-gray-400 items-center bg-gray-400">
                 <td class="w-20 font-extrabold text-xl"></td>
-                <td class="w-32 font-extrabold text-xl">عدد ايام الأسبوع</td>
+                <td class="w-32 font-extrabold text-xl">المادة</td>
                 <td class="w-32 font-extrabold text-xl text-center">حذف</td>
               </tr>
             </thead>
@@ -92,7 +95,7 @@
             <thead>
               <tr class="flex flex-wrap font-bold border-b-2 border-gray-400 items-center bg-gray-400">
                 <td class="w-20 font-extrabold text-xl"></td>
-                <td class="w-32 font-extrabold text-xl">عدد ايام الأسبوع</td>
+                <td class="w-32 font-extrabold text-xl">الأستاذ</td>
                 <td class="w-32 font-extrabold text-xl text-center">حذف</td>
               </tr>
             </thead>
@@ -138,6 +141,7 @@ export default {
       userInput:{
           dayInput:null,
           classInput:null,
+          classsubInDayInput:null,
           subjectInput:null,
           teacherInput:null
       },
@@ -156,15 +160,17 @@ export default {
         this.userInput.dayInput = null
       },
       AddClass(){
-        if(this.userInput.classInput == null)return
+        if(this.userInput.classInput == null || this.userInput.classsubInDayInput == null)return
         let lastId = Math.max(...this.data.mainData.classes.map(day=>{
             return day.id
         }))
         this.data.mainData.classes.push({
               id:lastId+1,
-              name:this.userInput.classInput
+              name:this.userInput.classInput,
+              subInDay:this.userInput.classsubInDayInput
         })
         this.userInput.classInput = null
+        this.userInput.classsubInDayInput = null
       },
       AddSubject(){
         if(this.userInput.subjectInput == null)return
