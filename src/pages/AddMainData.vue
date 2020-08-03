@@ -37,7 +37,7 @@
               <tr class="flex flex-wrap font-bold border-b-2 border-gray-400 items-center bg-gray-400">
                 <td class="w-20 font-extrabold text-xl"></td>
                 <td class="w-32 font-extrabold text-xl">الصف</td>
-                <td class="w-32 font-extrabold text-xl">عدد الحصص</td>
+                <td class="w-32 font-extrabold text-xl">عدد الحصص في اليوم</td>
                 <td class="w-32 font-extrabold text-xl text-center">حذف</td>
               </tr>
             </thead>
@@ -161,8 +161,8 @@ export default {
       },
       AddClass(){
         if(this.userInput.classInput == null || this.userInput.classsubInDayInput == null)return
-        let lastId = Math.max(...this.data.mainData.classes.map(day=>{
-            return day.id
+        let lastId = Math.max(...this.data.mainData.classes.map(theClass=>{
+            return theClass.id
         }))
         this.data.mainData.classes.push({
               id:lastId+1,
@@ -174,8 +174,8 @@ export default {
       },
       AddSubject(){
         if(this.userInput.subjectInput == null)return
-        let lastId = Math.max(...this.data.mainData.subjects.map(day=>{
-            return day.id
+        let lastId = Math.max(...this.data.mainData.subjects.map(subject=>{
+            return subject.id
         }))
         this.data.mainData.subjects.push({
               id:lastId+1,
@@ -185,8 +185,8 @@ export default {
       },
       AddTeacher(){
         if(this.userInput.teacherInput == null)return
-        let lastId = Math.max(...this.data.mainData.teachers.map(day=>{
-            return day.id
+        let lastId = Math.max(...this.data.mainData.teachers.map(teacher=>{
+            return teacher.id
         }))
         this.data.mainData.teachers.push({
               id:lastId+1,
