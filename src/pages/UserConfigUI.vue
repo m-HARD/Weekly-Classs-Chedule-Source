@@ -2,6 +2,21 @@
   <div class="l16">
   
       <div class="w-full mt-20">
+
+        <div class="flex justify-center">
+          <div class="w-2/3 py-3 px-5 bg-gray-300 rounded shadow flex justify-between items-center">
+            <span>
+              في هذه المرحلة يجب ادخال كافة البيانات اسم المعلم والمواد وعدد الحصص في الأسبوع واختيار احد الطرق ليتم التوزيع عليها : <br>
+              1- التوزيع الذكي : يتم التوزيع فيها بشكل عشوائي حصة او حصتين في اليوم<br>
+              2- 1.1.1 يتم فيها توزيع بوضع حصة واحدة في اليوم الواحد<br>
+              3- 2.2.2 يتم فيها توزيع بوضع حصتين متجاورتين في اليوم الواحد<br>
+              4- ملء الجدول يتم فيها توزيع بحيث تتوزعفي كامل الأسبوع سواءا حصة او حصتين<br>
+              *- يرجى اختيار خيار التعدد في حالة المواد التي متكررة في نفس اليوم في نقس اليوم<br>
+            </span>
+            <span class="bg-green-500 hover:bg-green-600 py-1 px-10 rounded cursor-pointer" @click="GoToUrl('fixed-subjects')">تم</span>
+          </div>
+        </div>
+
         <form class='flex justify-center mt-20' @submit.prevent="addToUserConfig()">
             <div class='w-full max-w-2xl bg-white rounded-lg p-6 shadow-xl'>
                 <div class='flex flex-wrap -mx-3'>
@@ -122,7 +137,7 @@
 </template>
 
 <script>
-
+import { eventBus } from '@/main'
 export default {
   name: 'viewSomeData',
   props:{
@@ -147,6 +162,9 @@ export default {
     }
   },
   methods: {
+    GoToUrl(url){
+      eventBus.$emit('ChangeUrl',url)
+    },
     DeleteFromuserConfigBeforeChange(index){
           this.data.userConfigBeforeChange.splice(index,1);
     },
