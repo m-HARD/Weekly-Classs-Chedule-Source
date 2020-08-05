@@ -3,6 +3,13 @@
   
       <div class="w-full mt-20">
 
+        <div class="flex justify-center">
+          <div class="w-2/3 py-3 px-5 bg-gray-300 rounded shadow flex justify-between items-center">
+            <span>في هذه المرحلة يجب ادخال جميع البيانات الأساسية من عدد ايام الأسبوع والفصول وكل المواد وكل المعلمين</span>
+            <span class="bg-green-500 hover:bg-green-600 py-1 px-10 rounded cursor-pointer" @click="GoToUrl('app-user-config-ui')">تم</span>
+          </div>
+        </div>
+
         <div class="flex justify-center py-10">
           <table class="table-auto mt-10 rounded shadow-xl overflow-hidden">
             <thead>
@@ -125,6 +132,7 @@
 </template>
 
 <script>
+import { eventBus } from '@/main'
 import data from '@/data/data'
 
 export default {
@@ -148,6 +156,9 @@ export default {
     }
   },
   methods: {
+      GoToUrl(url){
+        eventBus.$emit('ChangeUrl',url)
+      },
       AddDay(){
         if(this.userInput.dayInput == null)return
         let lastId = Math.max(...this.data.mainData.dayOfWeek.map(day=>{
