@@ -3,6 +3,17 @@
       <Select v-if="select.showSelect" type="fixedSub" :data="{target:select.target,options:select.options,optionsShow:select.optionsShow,from:select.from}" @end="endSelect()"/>
 
       <div class="w-full mt-20">
+
+        <div class="flex justify-center">
+          <div class="w-2/3 py-3 px-5 bg-gray-300 rounded shadow flex justify-between items-center">
+            <span>
+              في هذه المرحلة يرجي تحديد الحصص المراد ان تكون ثابتة عند انشاء الجدول مثلا النشاطات او غيرها<br>
+              في حالة لا توجد اي مواد او حصص ثابتة اضغط تم للمواصلة
+            </span>
+            <span class="bg-green-500 hover:bg-green-600 py-1 px-10 rounded cursor-pointer" @click="GoToUrl('teacher-exemptions')">تم</span>
+          </div>
+        </div>
+
         <table class="table-auto mt-10" v-for="theClass in data.mainData.classes" :key="theClass.id">
           <thead>
             <tr class="flex flex-wrap font-bold border-b-2 border-gray-400">
@@ -28,6 +39,8 @@
 <script>
 import data from '@/data/data'
 import Select from '../components/Select'
+import { eventBus } from '@/main'
+
 export default {
     name:"InitialTable",
     mixins:[data],
@@ -55,6 +68,9 @@ export default {
       this.addToTable();
     },
     methods: {
+      GoToUrl(url){
+        eventBus.$emit('ChangeUrl',url)
+      },
       addSubject(theClass,day,sub){
         this.select.showSelect=true
         this.select.target = this.data.userConfigBeforeChange
