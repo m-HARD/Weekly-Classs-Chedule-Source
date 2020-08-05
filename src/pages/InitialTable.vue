@@ -1,11 +1,21 @@
 <template>
     <div name="InitialTable">
-      <div class="w-full flex justify-center">
-        <button class="p-2 mt-5 mx-5 bg-gray-400 rounded hover:bg-gray-500 focus:outline-none cursor-pointer"
-          @click="startCheckStetment()">Start Check</button>
-      </div>
 
       <div class="w-full mt-20" v-if="showTable">
+
+        <div class="flex justify-center">
+          <div class="w-2/3 py-3 px-5 bg-gray-300 rounded shadow flex justify-between items-center">
+            <span>
+              في هذه المرحلة يتم فيها التحقق من المدخلات لا يمكنك المتابعة الا عند اصلاح الأخطاء ان وجدت : <br>
+              1- الخلفيةالحمراء تعني *هذه الحصة فارغة<br>
+              2- الخلفية الخضراء تعني *هذه الحصة ادخلت على انها ثابتة<br>
+              *- في حالة تحول خلفية الفصل الي اللون الأحمر فهذا يعني ان عدد المواد اكبر من عدد حصص الأسبوع<br>
+              *- في حالة وجود اخطاء يتم عرض الخطأ ليتم حله<br>
+            </span>
+            <span class="bg-green-500 hover:bg-green-600 py-1 px-10 rounded cursor-pointer" @click="GoToUrl('app-main-ui')">تم</span>
+          </div>
+        </div>
+
         <div class="mt-64">
           <ul class="mx-5" v-for="(error,i) in errorsFound" :key="i">
             <li>{{ error.details }}</li>
@@ -14,7 +24,7 @@
 
         <table class="table-auto mt-10" v-for="theClass in classes" :key="theClass.id">
           <thead>
-            <tr class="flex flex-wrap font-bold mb-1 border-b-2 border-gray-400">
+            <tr class="flex flex-wrap font-bold border-b-2 border-gray-400">
               <td class="w-64 font-extrabold text-xl">الصف {{ theClass.name }}</td>
               <td class="w-56 font-semibold" v-for="(sub,i) in theClass.subInDay" :key="i">{{ subInDay[sub-1] }}</td>
             </tr>
@@ -34,6 +44,7 @@
 </template>
 
 <script>
+import { eventBus } from '@/main'
 import data from '@/data/data'
 export default {
     name:"InitialTable",
@@ -56,8 +67,12 @@ export default {
     },
     activated() {
       this.addFullInitialTable();
+      this.startCheckStetment();
     },
     methods: {
+      GoToUrl(url){
+        eventBus.$emit('ChangeUrl',url)
+      },
       theClassHasError(classId){
         let returnVal = false
         this.errorsFound.forEach(element => {
