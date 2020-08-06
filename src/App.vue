@@ -11,6 +11,8 @@
           <span @click="currentView ='initial-table'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">Initial Table</span>
           <span @click="currentView ='app-view-some-data'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">some data</span>
         </nav>
+
+        <pagenation />
         
         
         <keep-alive>
@@ -24,6 +26,7 @@
 
 <script>
 import { eventBus } from './main'
+import Pagenation from './components/Pagenation'
 import DefulteUserConfig from '@/data/DefulteUserConfig'
 import data from './data/data'
 import HomePage from './pages/HomePage'
@@ -38,6 +41,7 @@ import InitialTable from './pages/InitialTable'
 import Vue from 'vue'
 
 
+Vue.component('pagenation',Pagenation)
 Vue.component('home-page',HomePage)
 Vue.component('test',Test)
 Vue.component('app-main-ui',MainUI)
