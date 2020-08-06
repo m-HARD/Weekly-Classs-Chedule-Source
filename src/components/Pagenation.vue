@@ -67,18 +67,6 @@ export default {
         currentPage(){
             this.currentPageF()
         }
-        /*
-        Vue.component('pagenation',Pagenation)
-        Vue.component('home-page',HomePage)
-        Vue.component('test',Test)
-        Vue.component('app-main-ui',MainUI)
-        Vue.component('add-main-data',AddMainData)
-        Vue.component('app-user-config-ui',UserConfigUI)
-        Vue.component('fixed-subjects',FixedSubjects)
-        Vue.component('teacher-exemptions',TeacherExemptions)
-        Vue.component('initial-table',InitialTable)
-        Vue.component('app-view-some-data',viewSomeData)
-        */
     },
 }
 </script>
