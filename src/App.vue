@@ -12,7 +12,7 @@
           <span @click="currentView ='app-view-some-data'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">some data</span>
         </nav>
 
-        <pagenation />
+        <pagenation :currentPage="currentView"/>
         
         
         <keep-alive>
