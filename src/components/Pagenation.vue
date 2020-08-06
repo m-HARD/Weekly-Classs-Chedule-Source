@@ -34,7 +34,19 @@ export default {
     data() {
         return {
             pageNumber:0,
-            showPagenation:true
+            showPagenation:true,
+
+            unShowPages:[
+                "home-page",
+                "app-main-ui"
+            ],
+            pages:[
+                "add-main-data",
+                "app-user-config-ui",
+                "fixed-subjects",
+                "teacher-exemptions",
+                "initial-table"
+            ]
         }
     },
     created() {
@@ -42,25 +54,13 @@ export default {
     },
     methods: {
         currentPageF(){
-            let cpage = this.currentPage
-            if (cpage == "home-page") {
+            if (this.unShowPages.indexOf(this.currentPage) != -1) {
                 this.showPagenation = false
-                return
             }else{
                 this.showPagenation = true
             }
 
-            if (cpage == "add-main-data") {
-                this.pageNumber = 1
-            }else if(cpage == "app-user-config-ui"){
-                this.pageNumber = 2
-            }else if(cpage == "fixed-subjects"){
-                this.pageNumber = 3
-            }else if(cpage == "teacher-exemptions"){
-                this.pageNumber = 4
-            }else if(cpage == "initial-table"){
-                this.pageNumber = 5
-            }
+            this.pageNumber = this.pages.indexOf(this.currentPage) +1
         }
     },
     watch: {
