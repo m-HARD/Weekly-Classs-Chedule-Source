@@ -12,7 +12,7 @@
       </div>
 
       <div class="mt-64">
-        <div v-for="(theClass,i) in classes" :key="i">
+        <div v-for="(theClass,i) in data.mainData.classes" :key="i">
           {{ theClass.name }} :
 
           <ul class="mx-5" v-for="(notAdd,i) in iCanNotAddIt[theClass.id - 1]" :key="i">
@@ -23,17 +23,17 @@
 
       <div class="w-full mt-20">
 
-        <table class="table-auto mt-10" v-for="theClass in classes" :key="theClass.id">
+        <table class="table-auto mt-10" v-for="theClass in data.mainData.classes" :key="theClass.id">
           <thead>
             <tr class="flex flex-wrap font-bold mb-1 border-b-2 border-gray-400">
               <td class="w-64 font-extrabold text-xl">الصف {{ theClass.name }}</td>
-              <td class="w-56 font-semibold" v-for="(sub,i) in theClass.subInDay" :key="i">{{ subInDay[sub-1] }}</td>
+              <td class="w-56 font-semibold" v-for="(sub,i) in theClass.subInDay" :key="i">{{ data.mainData.subInDay[sub-1] }}</td>
             </tr>
           </thead>
           <tbody>
             <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="day in data.mainData.dayOfWeek" :key="day.id">
               <td class="w-64 font-semibold">{{ day.name }}</td>
-              <td class="w-56" :style="sub.subject.name != null ?{'background-color':colorDefulte == 0 ? colors[(sub.subject.id -1) %30]:colorDefulte == 1 ? colors[(sub.teacher.id -1) %30]:sub.teacher.id == 22  || sub.subject.name == 'عربي' ? colors[0]:''}:''"
+              <td class="w-56" :style="sub.subject.name != null ?{'background-color':colorDefulte == 0 ? data.mainData.colors[(sub.subject.id -1) %30]:colorDefulte == 1 ? data.mainData.colors[(sub.teacher.id -1) %30]:sub.teacher.id == 22  || sub.subject.name == 'عربي' ? data.mainData.colors[0]:''}:''"
                v-for="(sub,i) in data.subInClasses[theClass.id -1][day.id-1]" :key="i">
                 {{ sub.subject.name }} {{ sub.teacher.name != null && sub.teacher.name != "" ? '('+sub.teacher.name+')':'' }}
               </td>
@@ -54,10 +54,8 @@
 </template>
 
 <script>
-import data from '@/data/data'
 export default {
   name: 'mainUi',
-  mixins:[data],
   props:{
     data:{
       type:Object,
@@ -74,7 +72,7 @@ export default {
     }
   },
   created() {
-    for (let i = 0; i < this.classes.length; i++) {
+    for (let i = 0; i < this.data.mainData.classes.length; i++) {
       this.iCanNotAddIt.push([])
     }
   },
@@ -244,7 +242,7 @@ export default {
     addSubjectToAllClassByFirstToEndClass(){
       this.restartData();
 
-      this.classes.forEach(theClass => {
+      this.data.mainData.classes.forEach(theClass => {
         this.addSubjectToSpecificallyClass(theClass.id)
       })
       this.checkIfBestDistribution();
@@ -263,6 +261,23 @@ export default {
         this.addSubjectToClass(data.theClass.id,data)
       })
 
+    },
+    userDataBy(by,id){
+      if (by == "class") {
+        return this.data.userConfig.filter((data)=>{
+          return data.theClass.id == id
+        })
+      }else if (by == "teacher") {
+        return this.data.userConfig.filter((data)=>{
+          return data.teacher.id == id
+        })
+      }else if (by == "subject") {
+        return this.data.userConfig.filter((data)=>{
+          return data.subject.id == id
+        })
+      }
+
+      return []
     },
     addBestDistribution(canNotAddID){      
       if(this.bestDistribution.canNotAddLength == null || this.iCanNotAddIt[canNotAddID - 1].length < this.bestDistribution.canNotAddLength){

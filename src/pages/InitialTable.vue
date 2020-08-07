@@ -5,14 +5,17 @@
 
         <div class="flex justify-center">
           <div class="w-2/3 py-3 px-5 bg-gray-300 rounded shadow flex justify-between items-center">
-            <span>
+            <div>
               في هذه المرحلة يتم فيها التحقق من المدخلات لا يمكنك المتابعة الا عند اصلاح الأخطاء ان وجدت : <br>
               1- الخلفيةالحمراء تعني *هذه الحصة فارغة<br>
               2- الخلفية الخضراء تعني *هذه الحصة ادخلت على انها ثابتة<br>
               *- في حالة تحول خلفية الفصل الي اللون الأحمر فهذا يعني ان عدد المواد اكبر من عدد حصص الأسبوع<br>
               *- في حالة وجود اخطاء يتم عرض الخطأ ليتم حله<br>
-            </span>
-            <span class="bg-green-500 hover:bg-green-600 py-1 px-10 rounded cursor-pointer" @click="GoToUrl('app-main-ui')">تم</span>
+            </div>
+            <div>
+              <span class="bg-red-500 hover:bg-red-600 py-1 mx-1 px-10 rounded cursor-pointer" @click="GoToUrl('teacher-exemptions')">رجوع</span>
+              <span class="bg-green-500 hover:bg-green-600 py-1 mx-1 px-10 rounded cursor-pointer" @click="GoToUrl('app-main-ui')">تم</span>
+            </div>
           </div>
         </div>
 

@@ -18,7 +18,7 @@
           <thead>
             <tr class="flex flex-wrap font-bold border-b-2 border-gray-400">
               <td class="w-64 font-extrabold text-xl">الصف {{ theClass.name }}</td>
-              <td class="w-56 font-semibold" v-for="(sub,i) in theClass.subInDay" :key="i">{{ subInDay[sub-1] }}</td>
+              <td class="w-56 font-semibold" v-for="(sub,i) in theClass.subInDay" :key="i">{{ data.mainData.subInDay[sub-1] }}</td>
             </tr>
           </thead>
           <tbody>
@@ -37,13 +37,11 @@
 </template>
 
 <script>
-import data from '@/data/data'
 import Select from '../components/Select'
 import { eventBus } from '@/main'
 
 export default {
-    name:"InitialTable",
-    mixins:[data],
+    name:"FixedSubject",
     components:{Select},
     props:{
       data:{
@@ -74,7 +72,7 @@ export default {
       addSubject(theClass,day,sub){
         this.select.showSelect=true
         this.select.target = this.data.userConfigBeforeChange
-        this.select.from = {day:day.id-1,sub:sub}
+        this.select.from = {theClass:theClass.id,day:day.id-1,sub:sub}
         this.select.options = this.data.userConfigBeforeChange.filter(single => {
           return single.theClass.id == theClass.id && !single.fixed.status
         })
@@ -91,7 +89,7 @@ export default {
           var theClass = this.data.mainData.classes[y];
           var subInClass = []
           
-          for (let x = 0; x < this.dayOfWeek.length; x++) {
+          for (let x = 0; x < this.data.mainData.dayOfWeek.length; x++) {
             var sub = []
             for (let i = 0; i < theClass.subInDay; i++) {
               sub.push({

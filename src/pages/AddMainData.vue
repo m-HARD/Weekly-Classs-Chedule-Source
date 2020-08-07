@@ -133,11 +133,9 @@
 
 <script>
 import { eventBus } from '@/main'
-import data from '@/data/data'
 
 export default {
   name: 'viewSomeData',
-  mixins:[data],
   props:{
     data:{
       type:Object,

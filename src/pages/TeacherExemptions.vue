@@ -13,15 +13,15 @@
           </div>
         </div>
 
-        <table class="table-auto mt-10" v-for="teacher in teachers" :key="teacher.id">
+        <table class="table-auto mt-10" v-for="teacher in data.mainData.teachers" :key="teacher.id">
           <thead>
             <tr class="flex flex-wrap font-bold mb-1 border-b-2 border-gray-400">
               <td class="w-64 font-extrabold text-xl">استاذ {{ teacher.name }}</td>
-              <td class="w-56 font-semibold hover:bg-gray-200 cursor-pointer" @click.stop="exemptionReservationAllSub(teacher,sub-1)" v-for="(sub,i) in 8" :key="i" >{{ subInDay[sub-1] }}</td>
+              <td class="w-56 font-semibold hover:bg-gray-200 cursor-pointer" @click.stop="exemptionReservationAllSub(teacher,sub-1)" v-for="(sub,i) in 8" :key="i" >{{ data.mainData.subInDay[sub-1] }}</td>
             </tr>
           </thead>
           <tbody>
-            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="day in dayOfWeek" :key="day.id">
+            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="day in data.mainData.dayOfWeek" :key="day.id">
               <td class="w-64 font-semibold hover:bg-gray-200 cursor-pointer" @click.stop="exemptionReservationAllDay(teacher,day.id-1)">{{ day.name }}</td>
               <td class="w-56" v-for="(sub,i) in 8" :key="i">
                 <button class="btnClasses h-10" :class="TeachersExemptionsShow[teacher.id -1][day.id-1][sub-1]? 'bg-red-300 hover:bg-red-400':'bg-gray-300 hover:bg-gray-400'"
@@ -36,10 +36,8 @@
 
 <script>
 import { eventBus } from '@/main'
-import data from '@/data/data'
 export default {
     name:"InitialTable",
-    mixins:[data],
     props:{
       data:{
         type:Object,
@@ -54,10 +52,10 @@ export default {
     },
     created() {
       this.TeachersExemptions = [...this.data.teacherExemptions]
-      for (let y = 0; y < this.teachers.length; y++) {
+      for (let y = 0; y < this.data.mainData.teachers.length; y++) {
         var theDay = []
           
-          for (let x = 0; x < this.dayOfWeek.length; x++) {
+          for (let x = 0; x < this.data.mainData.dayOfWeek.length; x++) {
             var sub = []
             for (let i = 0; i < 8; i++) {
               sub.push(false)
@@ -94,7 +92,7 @@ export default {
         return returnVal
       },
       TeacherExemptions(){
-        this.teachers.forEach(teacher => {
+        this.data.mainData.teachers.forEach(teacher => {
           let teacherExemptions = this.TeacherExemptionsIsFound(teacher.id)
   
           if (teacherExemptions) {
@@ -110,7 +108,7 @@ export default {
         }
       },
       exemptionReservationAllSub(teacher,sub){
-        this.dayOfWeek.forEach(day => {
+        this.data.mainData.dayOfWeek.forEach(day => {
           this.exemptionReservation(teacher,day.id -1,sub)
         })
       },

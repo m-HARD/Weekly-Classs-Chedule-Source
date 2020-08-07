@@ -45,12 +45,14 @@ export default {
         SpecialFixedTable(id){
             let isExist = this.data.target.filter(data => {
                 if (data.fixed.location != null) {
-                    return data.fixed.location.day == this.data.from.day && data.fixed.location.sub == this.data.from.sub
+                    console.log('Hi : ' , data.fixed.location.day , this.data.from.day , data.fixed.location.sub , this.data.from.sub);
+                    return data.theClass.id == this.data.from.theClass && data.fixed.location.day == this.data.from.day && data.fixed.location.sub == this.data.from.sub
                 }
             })
 
-
+            console.log('Ex : ',isExist);
             if (isExist.length == 1) {
+                console.log('I Found It');
 
                 let theParent = this.data.options.filter(data => {
                     return data.subject.id == isExist[0].subject.id && data.teacher.id == isExist[0].teacher.id
@@ -85,6 +87,7 @@ export default {
                     this.data.target.push(itemAdd)
                 }
             }else{
+                console.log('#3');
                 let theOption = this.data.options[id]
                 let itemAdd = Object.assign({}, theOption)
     
