@@ -28,7 +28,6 @@
 import { eventBus } from './main'
 import Pagenation from './components/Pagenation'
 import DefulteUserConfig from '@/data/DefulteUserConfig'
-import data from './data/data'
 import HomePage from './pages/HomePage'
 import Test from './pages/Test'
 import MainUI from './pages/MainUI'
@@ -53,7 +52,6 @@ Vue.component('initial-table',InitialTable)
 Vue.component('app-view-some-data',viewSomeData)
 export default {
   name: 'App',
-  mixins:[data],
   data() {
     return {
       currentView:'home-page',
@@ -164,12 +162,13 @@ export default {
   },
   methods: {
     addSubInClass(){
+      this.subInClasses = []
       var id=0
-      for (let y = 0; y < this.classes.length; y++) {
-        var theClass = this.classes[y];
+      for (let y = 0; y < this.mainData.classes.length; y++) {
+        var theClass = this.mainData.classes[y];
         var subInClass = []
         
-        for (let x = 0; x < this.dayOfWeek.length; x++) {
+        for (let x = 0; x < this.mainData.dayOfWeek.length; x++) {
           var sub = []
           for (let i = 0; i < theClass.subInDay; i++) {
             sub.push({
@@ -254,6 +253,14 @@ export default {
       this.userConfig.sort(function (a,b) {
           return ((a.fixed.status == b.fixed.status) ? 0 : ((a.fixed.status < b.fixed.status) ? 1 : -1 ));       
       }.bind(this));
+    },
+  },
+  watch: {
+    'mainData.dayOfWeek'(){
+      this.addSubInClass()
+    },
+    'mainData.classes'(){
+      this.addSubInClass()
     },
   },
 }
