@@ -45,37 +45,32 @@ export default {
         SpecialFixedTable(id){
             let isExist = this.data.target.filter(data => {
                 if (data.fixed.location != null) {
-                    console.log('Hi : ' , data.fixed.location.day , this.data.from.day , data.fixed.location.sub , this.data.from.sub);
                     return data.theClass.id == this.data.from.theClass && data.fixed.location.day == this.data.from.day && data.fixed.location.sub == this.data.from.sub
                 }
             })
 
-            console.log('Ex : ',isExist);
             if (isExist.length == 1) {
-                console.log('I Found It');
 
                 let theParent = this.data.options.filter(data => {
                     return data.subject.id == isExist[0].subject.id && data.teacher.id == isExist[0].teacher.id
                 })
+                
                 let index = this.data.target.indexOf(isExist[0])
 
-                if (id != null) {
+                
                     if (theParent.length == 1) {
                         theParent[0].size += 1
-                    }else{
+                    }else if (isExist[0].subject.id != 0){
                         isExist[0].fixed ={"status":false,"location":null}
                         this.data.target.push(isExist[0])
                     }
-                }
                 
                 this.data.target.splice(index,1)
             }
-            
+
             if (id == null && isExist.length == 1) {
                 console.log("Delete Successfully");
-                console.log("#1");
             }else if (id == null) {
-                console.log("#2");
                 let itemAdd = Object.assign({}, this.data.options[0])
                 if (typeof itemAdd != 'undefined') {
                     itemAdd.subject = {"id":0,"name":"فراغ"}
@@ -87,7 +82,6 @@ export default {
                     this.data.target.push(itemAdd)
                 }
             }else{
-                console.log('#3');
                 let theOption = this.data.options[id]
                 let itemAdd = Object.assign({}, theOption)
     
