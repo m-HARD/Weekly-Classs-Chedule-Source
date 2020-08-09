@@ -25,15 +25,15 @@
           </ul>
         </div>
 
-        <table class="table-auto mt-10" v-for="theClass in classes" :key="theClass.id">
+        <table class="table-auto mt-10" v-for="theClass in data.mainData.classes" :key="theClass.id">
           <thead>
             <tr class="flex flex-wrap font-bold border-b-2 border-gray-400">
               <td class="w-64 font-extrabold text-xl">الصف {{ theClass.name }}</td>
-              <td class="w-56 font-semibold" v-for="(sub,i) in theClass.subInDay" :key="i">{{ subInDay[sub-1] }}</td>
+              <td class="w-56 font-semibold" v-for="(sub,i) in theClass.subInDay" :key="i">{{ data.mainData.subInDay[sub-1] }}</td>
             </tr>
           </thead>
           <tbody>
-            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="day in dayOfWeek" :key="day.id">
+            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="day in data.mainData.dayOfWeek" :key="day.id">
               <td class="w-64 font-semibold">{{ day.name }}</td>
               <td class="w-56" v-for="(sub,i) in fullInitialTable[theClass.id -1][day.id-1]" :key="i"
                 :class="{'bg-red-200':sub.subject == null,'bg-green-300':sub.fixed,'bg-red-500':theClassHasError(theClass.id)}">
@@ -48,10 +48,8 @@
 
 <script>
 import { eventBus } from '@/main'
-import data from '@/data/data'
 export default {
     name:"InitialTable",
-    mixins:[data],
     props:{
       data:{
         type:Object,
@@ -96,11 +94,11 @@ export default {
       },
       addFullInitialTable(){
         this.fullInitialTable=[]
-        for (let y = 0; y < this.classes.length; y++) {
-          var theClass = this.classes[y];
+        for (let y = 0; y < this.data.mainData.classes.length; y++) {
+          var theClass = this.data.mainData.classes[y];
           var subInClass = []
           
-          for (let x = 0; x < this.dayOfWeek.length; x++) {
+          for (let x = 0; x < this.data.mainData.dayOfWeek.length; x++) {
             var sub = []
             for (let i = 0; i < theClass.subInDay; i++) {
               sub.push({
@@ -156,7 +154,7 @@ export default {
         });
       },
       chaeckTeacher(){
-        this.teachers.forEach(teacher => {
+        this.data.mainData.teachers.forEach(teacher => {
           let teacherTable = this.initialTable.filter(data => {
             return data.teacher.id == teacher.id
           });
@@ -214,7 +212,7 @@ export default {
         var returnVal = false
   
         this.data.userConfigBeforeChange.forEach(singleUserConfig => {
-          if (singleUserConfig.size > this.dayOfWeek.length * 2) {
+          if (singleUserConfig.size > this.data.mainData.dayOfWeek.length * 2) {
             returnVal = true
           }  
         });
@@ -259,7 +257,7 @@ export default {
   
         if (retail == 0) {
   
-          for (let i = 0; i < this.dayOfWeek.length; i++) {
+          for (let i = 0; i < this.data.mainData.dayOfWeek.length; i++) {
             retailArray.push(0)
           }
           let size = singleUserConfig.size
@@ -290,11 +288,11 @@ export default {
           let size = singleUserConfig.size
           let duplicate = 0
           while (size > 0) {
-            if (retailArray.length < this.dayOfWeek.length) {
+            if (retailArray.length < this.data.mainData.dayOfWeek.length) {
               retailArray.push(1)
               size -= 1;
             } else {
-              retailArray[retailArray.length % this.dayOfWeek.length + duplicate++] += 1;
+              retailArray[retailArray.length % this.data.mainData.dayOfWeek.length + duplicate++] += 1;
               size -= 1;
             }
           }

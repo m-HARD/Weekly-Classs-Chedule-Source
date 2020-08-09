@@ -128,7 +128,7 @@
 import { eventBus } from '@/main'
 
 export default {
-  name: 'viewSomeData',
+  name: 'AddMainData',
   props:{
     data:{
       type:Object,

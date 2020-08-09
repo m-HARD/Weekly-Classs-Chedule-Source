@@ -142,7 +142,7 @@
 <script>
 import { eventBus } from '@/main'
 export default {
-  name: 'viewSomeData',
+  name: 'userConfigUi',
   props:{
     data:{
       type:Object,
