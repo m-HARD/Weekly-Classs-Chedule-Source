@@ -162,7 +162,6 @@ export default {
           });
           let totalExemptions = 0
           let teacherExemptions = this.data.teacherExemptions.filter(data => {
-            console.log(teacher,data.teacher);
             return data.teacher.id == teacher.id
           });
           if (teacherExemptions.length > 0) {

@@ -45,12 +45,12 @@ export default {
         SpecialFixedTable(id){
             let isExist = this.data.target.filter(data => {
                 if (data.fixed.location != null) {
-                    return data.theClass.id == this.data.from.theClass && data.fixed.location.day == this.data.from.day && data.fixed.location.sub == this.data.from.sub
+                    return data.theClass.id == this.data.from.theClass.id && data.fixed.location.day == this.data.from.day && data.fixed.location.sub == this.data.from.sub
                 }
             })
 
             if (isExist.length == 1) {
-
+                
                 let theParent = this.data.options.filter(data => {
                     return data.subject.id == isExist[0].subject.id && data.teacher.id == isExist[0].teacher.id
                 })
@@ -71,8 +71,9 @@ export default {
             if (id == null && isExist.length == 1) {
                 console.log("Delete Successfully");
             }else if (id == null) {
-                let itemAdd = Object.assign({}, this.data.options[0])
+                let itemAdd = {"theClass":{"id":null,"name":null,"subInDay":null},"teacher":{"id":null,"name":null},"subject":{"id":null,"name":null},"size":null,"duplication":null,"retail":null,"fixed":{"status":false,"location":null},"isExemptions":false}
                 if (typeof itemAdd != 'undefined') {
+                    itemAdd.theClass = this.data.from.theClass
                     itemAdd.subject = {"id":0,"name":"فراغ"}
                     itemAdd.teacher = {"id":0,"name":""}
                     itemAdd.size = 1

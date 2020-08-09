@@ -72,7 +72,7 @@ export default {
       addSubject(theClass,day,sub){
         this.select.showSelect=true
         this.select.target = this.data.userConfigBeforeChange
-        this.select.from = {theClass:theClass.id,day:day.id-1,sub:sub}
+        this.select.from = {theClass:theClass,day:day.id-1,sub:sub}
         this.select.options = this.data.userConfigBeforeChange.filter(single => {
           return single.theClass.id == theClass.id && !single.fixed.status
         })
