@@ -10,7 +10,10 @@
               في هذه المرحلة يرجي تحديد الحصص المراد ان تكون ثابتة عند انشاء الجدول مثلا النشاطات او غيرها<br>
               في حالة لا توجد اي مواد او حصص ثابتة اضغط تم للمواصلة
             </span>
-            <span class="bg-green-500 hover:bg-green-600 py-1 px-10 rounded cursor-pointer" @click="GoToUrl('teacher-exemptions')">تم</span>
+            <div>
+              <span class="bg-red-500 hover:bg-red-600 py-1 mx-1 px-10 rounded cursor-pointer" @click="GoToUrl('app-user-config-ui')">رجوع</span>
+              <span class="bg-green-500 hover:bg-green-600 py-1 px-10 rounded cursor-pointer" @click="GoToUrl('teacher-exemptions')">تم</span>
+            </div>
           </div>
         </div>
 

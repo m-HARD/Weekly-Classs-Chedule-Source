@@ -9,7 +9,10 @@
               في هذه المرحلة يرجي تحديد اعفاءات المعلمين او الحصص التي لا يستطيع المعلم الحضور اليها ليتم تجنب ادخال المعلم في هذه الحصص عند انشاء الجدول<br>
               في حالة لا توجد تعديلات اضغط تم للمواصلة
             </span>
-            <span class="bg-green-500 hover:bg-green-600 py-1 px-10 rounded cursor-pointer" @click="GoToUrl('initial-table')">تم</span>
+            <div>
+              <span class="bg-red-500 hover:bg-red-600 py-1 mx-1 px-10 rounded cursor-pointer" @click="GoToUrl('fixed-subjects')">رجوع</span>
+              <span class="bg-green-500 hover:bg-green-600 py-1 px-10 rounded cursor-pointer" @click="GoToUrl('initial-table')">تم</span>
+            </div>
           </div>
         </div>
 

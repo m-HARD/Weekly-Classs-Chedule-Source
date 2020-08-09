@@ -17,7 +17,9 @@
           {{ theClass.name }} :
 
           <ul class="mx-5" v-for="(notAdd,i) in iCanNotAddIt[theClass.id - 1]" :key="i">
-            <li>{{ notAdd }}</li>
+            <li><span class="font-bold">المادة : </span>{{ notAdd.subject.name }}
+                <span class="font-bold">الأستاذ : </span> {{ notAdd.teacher.name }}
+                <span class="font-bold">عدد الحصص : </span>{{ notAdd.size }}</li>
           </ul>
         </div>
       </div>

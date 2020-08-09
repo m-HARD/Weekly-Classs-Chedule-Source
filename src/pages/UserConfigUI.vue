@@ -13,7 +13,10 @@
               4- ملء الجدول يتم فيها توزيع بحيث تتوزعفي كامل الأسبوع سواءا حصة او حصتين<br>
               *- يرجى اختيار خيار التعدد في حالة المواد التي متكررة في نفس اليوم في نقس اليوم<br>
             </span>
-            <span class="bg-green-500 hover:bg-green-600 py-1 px-10 rounded cursor-pointer" @click="GoToUrl('fixed-subjects')">تم</span>
+            <div>
+              <span class="bg-red-500 hover:bg-red-600 py-1 mx-1 px-10 rounded cursor-pointer" @click="GoToUrl('add-main-data')">رجوع</span>
+              <span class="bg-green-500 hover:bg-green-600 py-1 px-10 rounded cursor-pointer" @click="GoToUrl('fixed-subjects')">تم</span>
+            </div>
           </div>
         </div>
 
