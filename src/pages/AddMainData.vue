@@ -16,22 +16,15 @@
               <tr class="flex flex-wrap font-bold border-b-2 border-gray-400 items-center bg-gray-400">
                 <td class="w-20 font-extrabold text-xl"></td>
                 <td class="w-32 font-extrabold text-xl">عدد ايام الأسبوع</td>
-                <td class="w-32 font-extrabold text-xl text-center">حذف</td>
+                <td class="w-32 font-extrabold text-xl text-center">الحالة</td>
               </tr>
             </thead>
             <tbody>
-              <tr class="flex flex-wrap border-b-2 border-gray-300 bg-white hover:bg-gray-300" v-for="(day,i) in data.mainData.dayOfWeek" :key="i">
+              <tr class="flex flex-wrap border-b-2 border-gray-300 bg-white hover:bg-gray-300" v-for="(day,i) in dayOfWeekInput" :key="i">
                 <td class="w-20 font-semibold px-2">{{ i+1 }}</td>
                 <td class="w-32 font-semibold">{{ day.name }}</td>
                 <td class="w-32 font-semibold text-center">
-                  <span @click="data.mainData.dayOfWeek.splice(i,1)" class="text-red-500 cursor-pointer">X</span>
-                </td>
-              </tr>
-              <tr class="flex flex-wrap border-b-2 border-gray-300 bg-white">
-                <td class="w-20 font-semibold px-2"></td>
-                <td class="w-32 font-semibold"><input type="text" v-model="userInput.dayInput" class="w-full h-full bg-gray-400 p-1"></td>
-                <td class="w-32 font-semibold text-center flex items-center">
-                  <span @click="AddDay" class="bg-green-400 hover:bg-green-500 w-full py-1 rounded-md cursor-pointer">أضافة</span>
+                  <input type="checkbox" class="w-full h-full" v-model="day.state" @click="AddDay">
                 </td>
               </tr>
             </tbody>
@@ -144,6 +137,15 @@ export default {
   },
   data() {
     return {
+      dayOfWeekInput:[
+          {id:1,name:'السبت',state:true},
+          {id:2,name:'الأحد',state:true},
+          {id:3,name:'الأثنين',state:true},
+          {id:4,name:'الثلاثاء',state:true},
+          {id:5,name:'الأربعاء',state:true},
+          {id:6,name:'الخميس',state:true},
+          {id:7,name:'الجمعة',state:false}
+        ],
       userInput:{
           dayInput:null,
           classInput:null,
@@ -158,15 +160,18 @@ export default {
         eventBus.$emit('ChangeUrl',url)
       },
       AddDay(){
-        if(this.userInput.dayInput == null)return
-        let lastId = Math.max(...this.data.mainData.dayOfWeek.map(day=>{
-            return day.id
-        }))
-        this.data.mainData.dayOfWeek.push({
-              id:lastId+1,
-              name:this.userInput.dayInput
-        })
-        this.userInput.dayInput = null
+        setTimeout(() => {
+          let endArray = []
+          this.dayOfWeekInput.forEach(day => {
+            if (day.state == true) {
+              endArray.push({
+                id:day.id,
+                name:day.name
+              })
+            }
+          });
+          this.data.mainData.dayOfWeek = endArray
+        }, 50);
       },
       AddClass(){
         if(this.userInput.classInput == null || this.userInput.classsubInDayInput == null)return
