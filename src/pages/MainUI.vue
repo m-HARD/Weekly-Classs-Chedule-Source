@@ -12,6 +12,7 @@
       </div>
 
       <div class="mt-64">
+        <span class="font-bold">قائمة بالحصص التي لم يتم اضافتها : </span>
         <div v-for="(theClass,i) in data.mainData.classes" :key="i">
           {{ theClass.name }} :
 
@@ -240,12 +241,15 @@ export default {
       }, 50);
     },
     addSubjectToAllClassByFirstToEndClass(){
-      this.restartData();
-
-      this.data.mainData.classes.forEach(theClass => {
-        this.addSubjectToSpecificallyClass(theClass.id)
-      })
-      this.checkIfBestDistribution();
+      this.showLoad = true;
+      setTimeout(() => {
+        this.restartData();
+  
+        this.data.mainData.classes.forEach(theClass => {
+          this.addSubjectToSpecificallyClass(theClass.id)
+        })
+        this.checkIfBestDistribution();
+      }, 50);
     },
     addSubjectToSpecificallyClass(classId){
       this.iCanNotAddIt[classId - 1] = []

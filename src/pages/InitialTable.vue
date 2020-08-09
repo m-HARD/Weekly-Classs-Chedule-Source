@@ -72,6 +72,10 @@ export default {
       this.addFullInitialTable();
       this.startCheckStetment();
     },
+    deactivated(){
+      this.showTable = false
+      this.restartData()
+    },
     methods: {
       GoToUrlP(url){
         this.retailUserConfig('all')
@@ -336,9 +340,5 @@ export default {
   
       }
     },
-    deactivated(){
-      this.showTable = false
-      this.restartData()
-    }
 }
 </script>
