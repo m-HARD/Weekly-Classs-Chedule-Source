@@ -4,14 +4,29 @@
 
       <div v-show="showLoad" class="fixed inset-0 bg-black opacity-50"></div>
 
+      <div class="flex justify-center">
+          <div class="w-2/3 py-3 px-5 bg-gray-300 rounded shadow flex justify-between items-center">
+            <div>
+              المرحلة الأخيرة اضغط على انشاء الجدول ليتم انشاء الجدول بناءا على المدخلات الخاصة بك<br>
+              *.سيتم عرض كافة الحصص والمواد التي لم يستطع النظام اضافتها في قائمة خاصة نظرا لوجود تضارب او عدم تفرغ المعلم<br>
+              *.في حالة كانت المدخلات خالية من التعقيد سيتم انشاء الجدول خلال ثانية<br>
+              *.يمكن أعادة ادخال البيانات عبر الضغط على زر العودة
+            </div>
+            <div>
+              <span class="bg-red-500 hover:bg-red-600 py-1 mx-1 px-10 rounded cursor-pointer" @click="GoToUrl('add-main-data')">رجوع</span>
+              <span class="bg-green-300 py-1 mx-1 px-10 rounded cursor-not-allowed">طباعة النتائج</span>
+            </div>
+          </div>
+        </div>
+
       <div class="w-full flex justify-center">
         <button class="p-2 mt-5 mx-5 bg-gray-400 rounded hover:bg-gray-500 focus:outline-none cursor-pointer"
           @click="addSubjectToAllClass()">Random</button>
         <button class="p-2 mt-5 mx-5 bg-gray-400 rounded hover:bg-gray-500 focus:outline-none cursor-pointer"
-          @click="addSubjectToAllClassByFirstToEndClass()">Random from first class to end</button>
+          @click="addSubjectToAllClassByFirstToEndClass()">أنشاء الجدول</button>
       </div>
 
-      <div class="mt-64">
+      <div class="mt-40">
         <span class="font-bold">قائمة بالحصص التي لم يتم اضافتها : </span>
         <div v-for="(theClass,i) in data.mainData.classes" :key="i">
           {{ theClass.name }} :
@@ -24,7 +39,16 @@
         </div>
       </div>
 
-      <div class="w-full mt-20">
+      <div class="w-full flex justify-center mt-20">
+        <button class="p-2 mt-5 mx-5 bg-gray-400 rounded hover:bg-gray-500 focus:outline-none cursor-pointer"
+          @click="showMainUi = true">عرض جدول حصص الفصول</button>
+        <button class="p-2 mt-5 mx-5 bg-gray-400 rounded hover:bg-gray-500 focus:outline-none cursor-pointer"
+          @click="showMainUi = false">عرض جدول حصص المعلمين</button>
+      </div>
+
+
+
+      <div v-if="showMainUi" class="w-full mt-20">
 
         <table class="table-auto mt-10" v-for="theClass in data.mainData.classes" :key="theClass.id">
           <thead>
@@ -45,6 +69,8 @@
         </table>
 
       </div>
+
+      <viewSomeData v-if="!showMainUi" :data="data"/>
       
 
       <div class="w-full flex justify-center">
@@ -57,8 +83,13 @@
 </template>
 
 <script>
+import { eventBus } from '@/main'
+import viewSomeData from './ViewSomeData'
 export default {
   name: 'mainUi',
+  components:{
+    viewSomeData
+  },
   props:{
     data:{
       type:Object,
@@ -67,6 +98,7 @@ export default {
   },
   data() {
     return {
+      showMainUi:true,
       showLoad:false,
       iCanNotAddIt:[],
       bestDistribution:{data:null,canNotAddLength:null},
@@ -80,6 +112,9 @@ export default {
     }
   },
   methods: {
+    GoToUrl(url){
+      eventBus.$emit('ChangeUrl',url)
+    },
     emptySubInClass(theClass){
       var newVal = []
       for (let subInDay = 0; subInDay < theClass.length; subInDay++) {
