@@ -14,7 +14,8 @@
             </div>
             <div>
               <span class="bg-red-500 hover:bg-red-600 py-1 mx-1 px-10 rounded cursor-pointer" @click="GoToUrl('teacher-exemptions')">رجوع</span>
-              <span class="bg-green-500 hover:bg-green-600 py-1 mx-1 px-10 rounded cursor-pointer" @click="GoToUrlP('app-main-ui')">تم</span>
+              <span v-if="errorsFound.length > 0" class="bg-green-300 py-1 mx-1 px-10 rounded cursor-not-allowed">تم</span>
+              <span v-else class="bg-green-500 hover:bg-green-600 py-1 mx-1 px-10 rounded cursor-pointer" @click="GoToUrlP('app-main-ui')">تم</span>
             </div>
           </div>
         </div>
