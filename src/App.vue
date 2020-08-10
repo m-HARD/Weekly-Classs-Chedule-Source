@@ -1,6 +1,7 @@
 <template>
   <div name="App" style="min-width: -webkit-fill-available;width: max-content;">
-    <div class="bg-gray-200 min-h-screen" dir="rtl">
+    <div class="bg-gray-200 min-h-screen pt-10" dir="rtl">
+        <!--
         <nav class="w-full py-2 flex justify-center bg-gray-600">
           <span @click="currentView ='test'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">test</span>
           <span @click="currentView ='app-main-ui'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">Main</span>
@@ -11,6 +12,7 @@
           <span @click="currentView ='initial-table'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">Initial Table</span>
           <span @click="currentView ='app-view-some-data'" class="mx-3 px-5 py-2 text-xl cursor-pointer bg-gray-400 rounded">some data</span>
         </nav>
+        -->
 
         <pagenation :currentPage="currentView"/>
         
