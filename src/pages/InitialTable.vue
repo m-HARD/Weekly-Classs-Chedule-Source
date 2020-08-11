@@ -1,7 +1,7 @@
 <template>
     <div name="InitialTable">
 
-      <div class="w-full mt-20" v-if="showTable">
+      <div class="w-full mt-20 px-10" v-if="showTable">
 
         <div class="flex justify-center">
           <div class="w-2/3 py-3 px-5 bg-gray-300 rounded shadow flex justify-between items-center">
@@ -11,6 +11,8 @@
               2- الخلفية الخضراء تعني *هذه الحصة ادخلت على انها ثابتة<br>
               *- في حالة تحول خلفية الفصل الي اللون الأحمر فهذا يعني ان عدد المواد اكبر من عدد حصص الأسبوع<br>
               *- في حالة وجود اخطاء يتم عرض الخطأ ليتم حله<br>
+              *- ما زال العمل جار على عملية كشف الأخطاء لذلك لا تعطيك هذه النتائج جميع الأخطاء<br>
+              *- في حالة كان الفصل به عدة فراغات ينصح بوضع الحصص الأخيرة من اليوم الدراسي ك فراغات ثابتة في صفحة الحصص الثابتة
             </div>
             <div>
               <span class="bg-red-500 hover:bg-red-600 py-1 mx-1 px-10 rounded cursor-pointer" @click="GoToUrl('teacher-exemptions')">رجوع</span>
@@ -148,7 +150,7 @@ export default {
             this.errorsFound.push({
               type:'Overloaded',
               from:'subjects',
-              details:"class : "+singleSub.theClass.name + " ,Can't add to the table",
+              details:"المادة : "+singleSub.theClass.name + " ,لا يمكن اضافة هذه المادة",
               data:singleSub
             })
           }
@@ -167,11 +169,14 @@ export default {
             totalExemptions = teacherExemptions[0].locations.length
           }
 
-          if (teacherTable.length + totalExemptions > 30) {
+          let maxSubInDay = Math.max(...this.data.mainData.classes.map(data => {return data.subInDay}))
+          let dayLen = this.data.mainData.dayOfWeek.length
+          console.log(maxSubInDay*dayLen);
+          if (teacherTable.length + totalExemptions > maxSubInDay*dayLen) {
             this.errorsFound.push({
               type:'Overloaded',
               from:'teachers',
-              details:"teacher : "+teacher.name + " ,Can't add to the table"
+              details:"الأستاذ : "+teacher.name + " ,لا يمكن أضافة حصة لهذا الأستاذ بسبب ان عدد حصصه اكبر من المطلوب او ايام تغيبه كثيرة"
             })
           }
         });
