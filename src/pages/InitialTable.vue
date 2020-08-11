@@ -207,23 +207,9 @@ export default {
       },
 
 
-
-      
-      checkIfFoundError(){
-        var returnVal = false
-  
-        this.data.userConfigBeforeChange.forEach(singleUserConfig => {
-          if (singleUserConfig.size > this.data.mainData.dayOfWeek.length * 2) {
-            returnVal = true
-          }  
-        });
-  
-        return returnVal
-      },
       
       retailUserConfig(mode = null, theClass = null){
         var endArray = []
-        if (this.checkIfFoundError())return
   
         var userConfigAfterFilter = this.data.userConfigBeforeChange;
   
