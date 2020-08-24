@@ -175,9 +175,9 @@ export default {
       },
       AddClass(){
         if(this.userInput.classInput == null || this.userInput.classsubInDayInput == null)return
-        let lastId = Math.max(...this.data.mainData.classes.map(theClass=>{
+        let lastId = Math.max([1,...this.data.mainData.classes.map(theClass=>{
             return theClass.id
-        }))
+        })])
         this.data.mainData.classes.push({
               id:lastId+1,
               name:this.userInput.classInput,
@@ -188,9 +188,9 @@ export default {
       },
       AddSubject(){
         if(this.userInput.subjectInput == null)return
-        let lastId = Math.max(...this.data.mainData.subjects.map(subject=>{
+        let lastId = Math.max([1,...this.data.mainData.subjects.map(subject=>{
             return subject.id
-        }))
+        })])
         this.data.mainData.subjects.push({
               id:lastId+1,
               name:this.userInput.subjectInput
@@ -199,9 +199,9 @@ export default {
       },
       AddTeacher(){
         if(this.userInput.teacherInput == null)return
-        let lastId = Math.max(...this.data.mainData.teachers.map(teacher=>{
+        let lastId = Math.max([1,...this.data.mainData.teachers.map(teacher=>{
             return teacher.id
-        }))
+        })])
         this.data.mainData.teachers.push({
               id:lastId+1,
               name:this.userInput.teacherInput

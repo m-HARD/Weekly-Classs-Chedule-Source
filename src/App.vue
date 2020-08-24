@@ -29,7 +29,7 @@
 <script>
 import { eventBus } from './main'
 import Pagenation from './components/Pagenation'
-import DefulteUserConfig from '@/data/DefulteUserConfig'
+import DefulteUserConfig from '@/data/NoonSchool'
 import HomePage from './pages/HomePage'
 import Test from './pages/Test'
 import MainUI from './pages/MainUI'
@@ -60,7 +60,7 @@ export default {
       subInClasses:[],
       userConfig:[],
       userConfigBeforeChange:DefulteUserConfig,
-      teacherExemptions:[{teacher:{id:22,name:'سحر'},locations:[{"day":5,"sub":3},{"day":5,"sub":2},{"day":5,"sub":1}]}],
+      teacherExemptions:[],
       mainData:{
         subInDay:['الأولى','التانية','التالتة','الرابعة','الخامسة','السادسة','السابعة','التامنة','الناسعة'],
         dayOfWeek:[
@@ -72,14 +72,22 @@ export default {
           {id:6,name:'الخميس'},
         ],
         classes:[
-          {id:1,name:'الأول',subInDay:6},
-          {id:2,name:'الثاني',subInDay:6},
-          {id:3,name:'الثالث',subInDay:6},
-          {id:4,name:'الرابع',subInDay:7},
-          {id:5,name:'الخامس',subInDay:7},
-          {id:6,name:'السادس',subInDay:7},
-          {id:7,name:'السابع',subInDay:7},
-          {id:8,name:'الثامن',subInDay:8},
+          {id:1,name:'أولى أ',subInDay:5},
+          {id:2,name:'تانية أ',subInDay:5},
+          {id:3,name:'ثالثة أ',subInDay:5},
+          {id:4,name:'رابعة أ',subInDay:6},
+          {id:5,name:'خامسة أ',subInDay:7},
+          {id:6,name:'سادسة أ',subInDay:7},
+          {id:7,name:'سابعة أ',subInDay:7},
+          {id:8,name:'ثامنة أ',subInDay:7},
+          {id:9,name:'أولى ب',subInDay:5},
+          {id:10,name:'ثانية ب',subInDay:5},
+          {id:11,name:'ثالثة ب',subInDay:5},
+          {id:12,name:'رابعة ب',subInDay:6},
+          {id:13,name:'خامسة ب',subInDay:7},
+          {id:14,name:'سادسة ب',subInDay:7},
+          {id:15,name:'سابعة ب',subInDay:7},
+          {id:16,name:'ثامنة ب',subInDay:7},
         ],
         subjects:[
             {id:1,name:'قران'},
@@ -103,7 +111,8 @@ export default {
             {id:19,name:'اسلامي'},
             {id:20,name:'معاصر'},
             {id:21,name:'تقنية'},
-            {id:22,name:'سلامتنا'}
+            {id:22,name:'سلامتنا'},
+            {id:23,name:'احتياطي'}
         ],
         teachers:[
           {id:1,name:'مصعب'},
@@ -145,7 +154,9 @@ export default {
           {id:37,name:'5'},
           {id:38,name:'6'},
           {id:39,name:'7'},
-          {id:40,name:'8'}
+          {id:40,name:'8'},
+          {id:41,name:'رحاب'},
+          {id:42,name:'تاجوج'}
         ],
         colors:["#B46EC75c","#6FC76E5c","#6EC6C75c","#6E98C75c","#6E6EC75c","#C76E6E5c","#C6C76E5c","#8EC76E5c","#C7A46E5c","#C79B6E5c","#896EC75c","#A76EC75c","#C76EA15c","#C76E8A5c","#C76E7A5c",
                     "#6E96C75c","#C76EB35c","#C7AD6E5c","#C6C76E5c","#98C76E5c","#6EC77A5c","#6EC7AB5c","#6EB3C75c","#6E91C75c","#C7C76E5c","#6EC77E5c","#6EC7B55c","#C7B06E5c","#FBBB035c","#BFFB035c"]

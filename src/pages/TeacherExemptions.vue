@@ -40,7 +40,7 @@
 <script>
 import { eventBus } from '@/main'
 export default {
-    name:"InitialTable",
+    name:"TeacherExemptions",
     props:{
       data:{
         type:Object,
@@ -84,7 +84,7 @@ export default {
         if (teacherExemptions.length >= 1) {
           return teacherExemptions[0]
         }
-
+        
         return false
       },
       ifExempyionIsExist(teacherExemption, day, sub){
