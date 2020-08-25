@@ -171,7 +171,6 @@ export default {
 
           let maxSubInDay = Math.max(...this.data.mainData.classes.map(data => {return data.subInDay}))
           let dayLen = this.data.mainData.dayOfWeek.length
-          console.log(maxSubInDay*dayLen);
           if (teacherTable.length + totalExemptions > maxSubInDay*dayLen) {
             this.errorsFound.push({
               type:'Overloaded',

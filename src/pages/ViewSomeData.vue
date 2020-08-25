@@ -86,7 +86,9 @@ export default {
           if(typeof theClass[theDay] != 'undefined'){
             if(typeof theClass[theDay][theSubInDay] != 'undefined'){
               if (theClass[theDay][theSubInDay].teacher.id == teacherId) {
-                  done.push(theClass[theDay][theSubInDay].subject.name + ' ('+ (theClass[theDay][theSubInDay].oId[0]+1) +')')
+                let className = this.data.mainData.classes[theClass[theDay][theSubInDay].oId[0]].name
+                console.log(className);
+                  done.push(theClass[theDay][theSubInDay].subject.name + ' ('+ className +')')
                 }
             }
           }
