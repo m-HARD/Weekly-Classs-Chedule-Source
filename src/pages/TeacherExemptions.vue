@@ -16,19 +16,19 @@
           </div>
         </div>
 
-        <table class="table-auto mt-10" v-for="teacher in data.mainData.teachers" :key="teacher.id">
+        <table class="table-auto mt-10" v-for="(teacher,teacherIndex) in data.mainData.teachers" :key="teacher.id">
           <thead>
             <tr class="flex flex-wrap font-bold mb-1 border-b-2 border-gray-400">
               <td class="w-64 font-extrabold text-xl">استاذ {{ teacher.name }}</td>
-              <td class="w-56 font-semibold hover:bg-gray-200 cursor-pointer" @click.stop="exemptionReservationAllSub(teacher,sub-1)" v-for="(sub,i) in maxSubInDay" :key="i" >{{ data.mainData.subInDay[sub-1] }}</td>
+              <td class="w-56 font-semibold hover:bg-gray-200 cursor-pointer" @click.stop="exemptionReservationAllSub(teacher,subIndex)" v-for="(sub,subIndex) in maxSubInDay" :key="subIndex" >{{ data.mainData.subInDay[subIndex] }}</td>
             </tr>
           </thead>
           <tbody>
-            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="day in data.mainData.dayOfWeek" :key="day.id">
+            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="(day,dayIndex) in data.mainData.dayOfWeek" :key="day.id">
               <td class="w-64 font-semibold hover:bg-gray-200 cursor-pointer" @click.stop="exemptionReservationAllDay(teacher,day.id-1)">{{ day.name }}</td>
-              <td class="w-56" v-for="(sub,i) in maxSubInDay" :key="i">
-                <button class="btnClasses h-10" :class="TeachersExemptionsShow[teacher.id -1][day.id-1][sub-1]? 'bg-red-300 hover:bg-red-400':'bg-gray-300 hover:bg-gray-400'"
-                      @click.stop="exemptionReservation(teacher,day.id-1,sub-1)" />
+              <td class="w-56" v-for="(sub,subIndex) in maxSubInDay" :key="subIndex">
+                <button class="btnClasses h-10" :class="TeachersExemptionsShow[teacherIndex][dayIndex][subIndex]? 'bg-red-300 hover:bg-red-400':'bg-gray-300 hover:bg-gray-400'"
+                      @click.stop="exemptionReservation(teacher,dayIndex,subIndex)" />
               </td>
             </tr>
           </tbody>

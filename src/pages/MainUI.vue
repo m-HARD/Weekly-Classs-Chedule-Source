@@ -50,7 +50,7 @@
 
       <div v-if="showMainUi" class="w-full mt-20">
 
-        <table class="table-auto mt-10" v-for="theClass in data.mainData.classes" :key="theClass.id">
+        <table class="table-auto mt-10" v-for="(theClass,theClassIndex) in data.mainData.classes" :key="theClassIndex">
           <thead>
             <tr class="flex flex-wrap font-bold mb-1 border-b-2 border-gray-400">
               <td class="w-64 font-extrabold text-xl">الصف {{ theClass.name }}</td>
@@ -58,10 +58,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="day in data.mainData.dayOfWeek" :key="day.id">
+            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="(day,dayIndex) in data.mainData.dayOfWeek" :key="dayIndex">
               <td class="w-64 font-semibold">{{ day.name }}</td>
               <td class="w-56" :style="sub.subject.name != null ?{'background-color':colorDefulte == 0 ? data.mainData.colors[(sub.subject.id -1) %30]:colorDefulte == 1 ? data.mainData.colors[(sub.teacher.id -1) %30]:sub.teacher.id == 22  || sub.subject.name == 'عربي' ? data.mainData.colors[0]:''}:''"
-               v-for="(sub,i) in data.subInClasses[theClass.id -1][day.id-1]" :key="i">
+               v-for="(sub,i) in data.subInClasses[theClassIndex][dayIndex]" :key="i">
                 {{ sub.subject.name }} {{ sub.teacher.name != null && sub.teacher.name != "" ? '('+sub.teacher.name+')':'' }}
               </td>
             </tr>
@@ -186,8 +186,8 @@ export default {
     addFixedSubjectsToClasses(){
       this.data.userConfig.filter(isFixed => {
         return isFixed.fixed.status
-      }).forEach((data)=>{
-        var theClass = this.data.subInClasses[data.theClass.id -1]
+      }).forEach((data,index)=>{
+        var theClass = this.data.subInClasses[index]
         theClass[data.fixed.location.day][data.fixed.location.sub].subject = data.subject
         theClass[data.fixed.location.day][data.fixed.location.sub].teacher = data.teacher
       })
@@ -249,7 +249,14 @@ export default {
     },
 
     addSubjectToClass(id,data){
-      var theClass = this.data.subInClasses[id -1]
+      var classIndex;
+      for (classIndex = 0; classIndex < this.data.mainData.classes.length; classIndex++) {
+        if (this.data.mainData.classes[classIndex].id == id) {
+          break
+        }
+      }
+
+      var theClass = this.data.subInClasses[classIndex]
 
       var canAdd = this.canAdd({theClass:theClass,teacherId:data.teacher.id,data:data})
 
@@ -282,15 +289,22 @@ export default {
       setTimeout(() => {
         this.restartData();
   
-        this.data.mainData.classes.forEach(theClass => {
+        this.data.mainData.classes.forEach((theClass) => {
           this.addSubjectToSpecificallyClass(theClass.id)
         })
         this.checkIfBestDistribution();
       }, 50);
     },
     addSubjectToSpecificallyClass(classId){
-      this.iCanNotAddIt[classId - 1] = []
-      this.data.subInClasses[classId - 1].forEach(day => {
+      var classIndex;
+      for (classIndex = 0; classIndex < this.data.mainData.classes.length; classIndex++) {
+        if (this.data.mainData.classes[classIndex].id == classId) {
+          break
+        }
+      }
+
+      this.iCanNotAddIt[classIndex] = []
+      this.data.subInClasses[classIndex].forEach(day => {
         day.forEach(subInDay => {
           subInDay.subject = {id:null,name:null};
           subInDay.teacher = {id:null,name:null}
