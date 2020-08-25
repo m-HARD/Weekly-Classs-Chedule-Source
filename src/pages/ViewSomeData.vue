@@ -46,14 +46,14 @@
           <thead>
             <tr class="flex flex-wrap font-bold mb-1 border-b-2 border-gray-400">
               <td class="w-64 font-extrabold text-xl">استاذ {{ teacher.name }}</td>
-              <td class="w-56 font-semibold" v-for="(sub,i) in 8" :key="i">{{ data.mainData.subInDay[sub-1] }}</td>
+              <td class="w-56 font-semibold" v-for="(sub,subIndex) in 8" :key="subIndex">{{ data.mainData.subInDay[subIndex] }}</td>
             </tr>
           </thead>
           <tbody>
-            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="day in data.mainData.dayOfWeek" :key="day.id">
+            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="(day,dauIndex) in data.mainData.dayOfWeek" :key="day.id">
               <td class="w-64 font-semibold">{{ day.name }}</td>
               <td class="w-56" v-for="(sub,i) in 8" :key="i">
-                <span v-for="(sub,i) in getSubsOfTeacher(teacher.id,day.id-1,sub-1)" :key="i">{{ sub }}</span>
+                <span v-for="(subF,i) in getSubsOfTeacher(teacher.id,dauIndex,sub-1)" :key="i">{{ subF }}</span>
               </td>
             </tr>
           </tbody>

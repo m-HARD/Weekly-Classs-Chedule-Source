@@ -186,8 +186,15 @@ export default {
     addFixedSubjectsToClasses(){
       this.data.userConfig.filter(isFixed => {
         return isFixed.fixed.status
-      }).forEach((data,index)=>{
-        var theClass = this.data.subInClasses[index]
+      }).forEach(data =>{
+        var classIndex;
+        for (classIndex = 0; classIndex < this.data.mainData.classes.length; classIndex++) {
+          if (this.data.mainData.classes[classIndex].id == data.theClass.id) {
+            break
+          }
+        }
+
+        var theClass = this.data.subInClasses[classIndex]
         theClass[data.fixed.location.day][data.fixed.location.sub].subject = data.subject
         theClass[data.fixed.location.day][data.fixed.location.sub].teacher = data.teacher
       })
