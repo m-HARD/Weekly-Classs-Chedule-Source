@@ -100,11 +100,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr class="flex flex-wrap border-b-2 border-gray-300 bg-white hover:bg-gray-300" v-for="(day,i) in data.mainData.teachers" :key="i">
+              <tr class="flex flex-wrap border-b-2 border-gray-300 bg-white hover:bg-gray-300" v-for="(teacher,i) in data.mainData.teachers" :key="i">
                 <td class="w-20 font-semibold px-2">{{ i+1 }}</td>
-                <td class="w-32 font-semibold">{{ day.name }}</td>
+                <td class="w-32 font-semibold">{{ teacher.name }}</td>
                 <td class="w-32 font-semibold text-center">
-                  <span @click="data.mainData.teachers.splice(i,1)" class="text-red-500 cursor-pointer">X</span>
+                  <span v-if="teacher.id != 0" @click="data.mainData.teachers.splice(i,1)" class="text-red-500 cursor-pointer">X</span>
                 </td>
               </tr>
               <tr class="flex flex-wrap border-b-2 border-gray-300 bg-white">

@@ -12,6 +12,7 @@
               3- 2.2.2 يتم فيها توزيع بوضع حصتين متجاورتين في اليوم الواحد<br>
               4- ملء الجدول يتم فيها توزيع بحيث تتوزعفي كامل الأسبوع سواءا حصة او حصتين<br>
               *- يرجى اختيار خيار التعدد في حالة المواد التي متكررة في نفس اليوم في نقس اليوم<br>
+              *- في حالة وجود مادة فرعية ك النشاطات وغيرها يرجي وضع المعلم في خيار لا يوجد<br>
             </span>
             <div>
               <span class="bg-red-500 hover:bg-red-600 py-1 mx-1 px-10 rounded cursor-pointer" @click="GoToUrl('add-main-data')">رجوع</span>
@@ -184,7 +185,6 @@ export default {
             fixed: {"status":false,"location":null},
             isExemptions:false
         })
-        Input.teacher = null;
         Input.subject = null;
         Input.size = null;
         Input.duplication = null;

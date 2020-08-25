@@ -42,7 +42,7 @@
 
 
       <div class="w-full mt-20">
-        <table class="w-full table-auto mt-10" v-for="teacher in data.mainData.teachers" :key="teacher.id">
+        <table class="w-full table-auto mt-10" v-for="teacher in data.mainData.teachers" :key="teacher.id" v-show="teacher.id != 0">
           <thead>
             <tr class="flex flex-wrap font-bold mb-1 border-b-2 border-gray-400">
               <td class="w-64 font-extrabold text-xl">استاذ {{ teacher.name }}</td>
@@ -87,7 +87,6 @@ export default {
             if(typeof theClass[theDay][theSubInDay] != 'undefined'){
               if (theClass[theDay][theSubInDay].teacher.id == teacherId) {
                 let className = this.data.mainData.classes[theClass[theDay][theSubInDay].oId[0]].name
-                console.log(className);
                   done.push(theClass[theDay][theSubInDay].subject.name + ' ('+ className +')')
                 }
             }

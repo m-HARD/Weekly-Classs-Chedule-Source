@@ -52,7 +52,7 @@
 
         <table class="table-auto mt-10" v-for="(theClass,theClassIndex) in data.mainData.classes" :key="theClassIndex">
           <thead>
-            <tr class="flex flex-wrap font-bold mb-1 border-b-2 border-gray-400">
+            <tr class="flex flex-wrap font-bold border-b-2 border-gray-400">
               <td class="w-64 font-extrabold text-xl">الصف {{ theClass.name }}</td>
               <td class="w-56 font-semibold" v-for="(sub,i) in theClass.subInDay" :key="i">{{ data.mainData.subInDay[sub-1] }}</td>
             </tr>
@@ -137,6 +137,9 @@ export default {
     },
     teacherIsEmpty(teacherId,theDay,theSubInDay){
       var empty = true;
+      if (teacherId == 0) return empty
+
+
       this.data.subInClasses.forEach(theClass => {
         if(typeof theClass[theDay][theSubInDay] != 'undefined'){
           if (theClass[theDay][theSubInDay].teacher.id == teacherId) {
