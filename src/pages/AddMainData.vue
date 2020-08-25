@@ -1,7 +1,7 @@
 <template>
   <div class="l16">
   
-      <div class="w-full mt-20">
+      <div class="w-full py-20">
 
         <div class="flex justify-center">
           <div class="w-2/3 py-3 px-5 bg-gray-300 rounded shadow flex justify-between items-center">
@@ -118,6 +118,21 @@
           </table>
         </div>
 
+
+        <div class="flex justify-center py-10">
+          <div class="w-1/3 bg-gray-300 rounded shadow px-2 py-4 flex justify-between">
+            <div>
+              <span>أمكانية الجهاز</span>
+            </div>
+            <div class="flex">
+              <span class="mx-1"><input type="radio" name="pL" class="mx-1 cursor-pointer" @click="possibilityLevel(1)" checked>مستوى 1</span>
+              <span class="mx-1"><input type="radio" name="pL" class="mx-1 cursor-pointer" @click="possibilityLevel(2)">مستوى 2</span>
+              <span class="mx-1"><input type="radio" name="pL" class="mx-1 cursor-pointer" @click="possibilityLevel(3)">مستوى 3</span>
+              <span class="mx-1"><input type="radio" name="pL" class="mx-1 cursor-pointer" @click="possibilityLevel(4)">مستوى 4</span>
+            </div>
+          </div>
+        </div>
+
       </div>
 
 
@@ -207,6 +222,9 @@ export default {
               name:this.userInput.teacherInput
         })
         this.userInput.teacherInput = null
+      },
+      possibilityLevel(level){
+        eventBus.$emit('changePossibilityLevel',level)
       }
   },
 }

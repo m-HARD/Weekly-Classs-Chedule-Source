@@ -397,7 +397,7 @@ export default {
           })
           
           
-          if (++theAllSubjectTry == 20) {
+          if (++theAllSubjectTry == this.data.possibilityLevel * 20) {
             break
           }
           if (canNotAddClassCount > 0 && theAllSubjectTry % 5 == 0) {

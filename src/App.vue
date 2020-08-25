@@ -18,7 +18,16 @@
         
         
         <keep-alive>
-          <component :is="currentView" :data="{subInClasses:subInClasses,userConfig:userConfig,userConfigBeforeChange:userConfigBeforeChange,teacherExemptions:teacherExemptions,mainData:mainData}"></component>
+          <component :is="currentView"
+           :data="{
+             subInClasses:subInClasses,
+             userConfig:userConfig,
+             userConfigBeforeChange:userConfigBeforeChange,
+             teacherExemptions:teacherExemptions,
+             mainData:mainData,
+             possibilityLevel:possibilityLevel
+            }">
+          </component>
         </keep-alive>
 
     </div>
@@ -61,6 +70,7 @@ export default {
       userConfig:[],
       userConfigBeforeChange:DefulteUserConfig,
       teacherExemptions:[],
+      possibilityLevel:1,
       mainData:{
         subInDay:['الأولى','التانية','التالتة','الرابعة','الخامسة','السادسة','السابعة','التامنة','الناسعة'],
         dayOfWeek:[
@@ -172,6 +182,9 @@ export default {
     eventBus.$on('retailUserConfig',(data)=>{
       this.userConfig = data
       this.runSortFunctions()
+    })
+    eventBus.$on('changePossibilityLevel',(data)=>{
+      this.possibilityLevel = data
     })
   },
   methods: {
