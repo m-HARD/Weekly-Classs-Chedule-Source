@@ -28,17 +28,17 @@
           </ul>
         </div>
 
-        <table class="table-auto mt-10" v-for="theClass in data.mainData.classes" :key="theClass.id">
+        <table class="table-auto mt-10" v-for="(theClass,classIndex) in data.mainData.classes" :key="classIndex">
           <thead>
             <tr class="flex flex-wrap font-bold border-b-2 border-gray-400">
               <td class="w-64 font-extrabold text-xl">الصف {{ theClass.name }}</td>
-              <td class="w-56 font-semibold" v-for="(sub,i) in theClass.subInDay" :key="i">{{ data.mainData.subInDay[sub-1] }}</td>
+              <td class="w-56 font-semibold" v-for="(sub,subIndex) in theClass.subInDay" :key="subIndex">{{ data.mainData.subInDay[subIndex] }}</td>
             </tr>
           </thead>
           <tbody>
-            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="day in data.mainData.dayOfWeek" :key="day.id">
+            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="(day,dayIndex) in data.mainData.dayOfWeek" :key="dayIndex">
               <td class="w-64 font-semibold">{{ day.name }}</td>
-              <td class="w-56" v-for="(sub,i) in fullInitialTable[theClass.id -1][day.id-1]" :key="i"
+              <td class="w-56" v-for="(sub,i) in fullInitialTable[classIndex][dayIndex]" :key="i"
                 :class="{'bg-red-200':sub.subject == null,'bg-green-300':sub.fixed,'bg-red-500':theClassHasError(theClass.id)}">
                 <span :class="{'opacity-75':!sub.fixed}">{{ sub.subject }} {{ sub.teacher != null && sub.teacher != "" ? '('+sub.teacher+')':'' }}</span>
               </td>
