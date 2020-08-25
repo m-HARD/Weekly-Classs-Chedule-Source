@@ -1,7 +1,7 @@
 <template>
     <div name="InitialTable">
 
-      <div class="w-full mt-20 px-10" v-if="showTable">
+      <div class="w-full mt-20 pb-20 px-10" v-if="showTable">
 
         <div class="flex justify-center">
           <div class="w-2/3 py-3 px-5 bg-gray-300 rounded shadow flex justify-between items-center">

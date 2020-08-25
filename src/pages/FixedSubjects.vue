@@ -17,18 +17,18 @@
           </div>
         </div>
 
-        <table class="table-auto mt-10" v-for="theClass in data.mainData.classes" :key="theClass.id">
+        <table class="table-auto mt-10" v-for="(theClass,classIndex) in data.mainData.classes" :key="theClass.id">
           <thead>
             <tr class="flex flex-wrap font-bold border-b-2 border-gray-400">
               <td class="w-64 font-extrabold text-xl">الصف {{ theClass.name }}</td>
-              <td class="w-56 font-semibold" v-for="(sub,i) in theClass.subInDay" :key="i">{{ data.mainData.subInDay[sub-1] }}</td>
+              <td class="w-56 font-semibold" v-for="(sub,subIndex) in theClass.subInDay" :key="subIndex">{{ data.mainData.subInDay[subIndex] }}</td>
             </tr>
           </thead>
           <tbody>
-            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="day in data.mainData.dayOfWeek" :key="day.id">
+            <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="(day,dayIndex) in data.mainData.dayOfWeek" :key="dayIndex">
               <td class="w-64 font-semibold">{{ day.name }}</td>
-              <td class="w-56" v-for="(sub,i) in fullInitialTable[theClass.id -1][day.id-1]" :key="i">
-                <button @click="addSubject(theClass, day, i)" class="btnClasses bg-gray-300 h-10">
+              <td class="w-56" v-for="(sub,subIndex) in fullInitialTable[classIndex][dayIndex]" :key="subIndex">
+                <button @click="addSubject(theClass, dayIndex, subIndex)" class="btnClasses bg-gray-300 h-10">
                   {{ sub.subject }} {{ sub.teacher != null && sub.teacher != "" ? '('+sub.teacher+')':'' }}
                 </button>
               </td>
@@ -72,10 +72,10 @@ export default {
       GoToUrl(url){
         eventBus.$emit('ChangeUrl',url)
       },
-      addSubject(theClass,day,sub){
+      addSubject(theClass,dayIndex,sub){
         this.select.showSelect=true
         this.select.target = this.data.userConfigBeforeChange
-        this.select.from = {theClass:theClass,day:day.id-1,sub:sub}
+        this.select.from = {theClass:theClass,day:dayIndex,sub:sub}
         this.select.options = this.data.userConfigBeforeChange.filter(single => {
           return single.theClass.id == theClass.id && !single.fixed.status
         })
