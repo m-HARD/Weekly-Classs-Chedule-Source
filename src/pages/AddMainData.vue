@@ -153,7 +153,7 @@ export default {
   data() {
     return {
       dayOfWeekInput:[
-          {id:1,name:'السبت',state:true},
+          {id:1,name:'السبت',state:false},
           {id:2,name:'الأحد',state:true},
           {id:3,name:'الأثنين',state:true},
           {id:4,name:'الثلاثاء',state:true},

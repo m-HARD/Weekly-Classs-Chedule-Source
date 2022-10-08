@@ -60,7 +60,7 @@
           <tbody>
             <tr class="flex flex-wrap border-b-2 border-gray-400" v-for="(day,dayIndex) in data.mainData.dayOfWeek" :key="dayIndex">
               <td class="w-64 font-semibold">{{ day.name }}</td>
-              <td class="w-56" :style="sub.subject.name != null ?{'background-color':colorDefulte == 0 ? data.mainData.colors[(sub.subject.id -1) %30]:colorDefulte == 1 ? data.mainData.colors[(sub.teacher.id -1) %30]:sub.teacher.id == 22  || sub.subject.name == 'عربي' ? data.mainData.colors[0]:''}:''"
+              <td class="w-56" :style="sub.subject.name != null ?{'background-color':colorDefulte == 0 ? data.mainData.colors[(sub.subject.id -1) %30]:colorDefulte == 1 ? data.mainData.colors[(sub.teacher.id -1) %30]:sub.teacher.id == 22  || sub.subject.name == customSubjectColor ? data.mainData.colors[0]:''}:''"
                v-for="(sub,i) in data.subInClasses[theClassIndex][dayIndex]" :key="i">
                 {{ sub.subject.name }} {{ sub.teacher.name != null && sub.teacher.name != "" ? '('+sub.teacher.name+')':'' }}
               </td>
@@ -103,7 +103,8 @@ export default {
       iCanNotAddIt:[],
       bestDistribution:{data:null,canNotAddLength:null},
 
-      colorDefulte:3
+      colorDefulte:3,
+      customSubjectColor:''
     }
   },
   created() {
