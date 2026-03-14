@@ -101,8 +101,8 @@ export default {
       showMainUi:true,
       showLoad:false,
       iCanNotAddIt:[],
-      bestDistribution:{data:null,canNotAddLength:null},
-
+      bestDistribution:{data:null,canNotAddLength:null,canNotAddList:null},
+      bestAttemptState:null,
       colorDefulte:3,
       customSubjectColor:''
     }
@@ -113,6 +113,82 @@ export default {
     }
   },
   methods: {
+    shuffleArray(arr){
+      var a = arr.slice()
+      for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = a[i]; a[i] = a[j]; a[j] = t
+      }
+      return a
+    },
+    getTotalCanNotAdd(){
+      var total = 0
+      this.iCanNotAddIt.forEach(function (list) { total += list.length })
+      return total
+    },
+    getClassesAffectedCount(){
+      var n = 0
+      this.iCanNotAddIt.forEach(function (list) { if (list.length > 0) n++ })
+      return n
+    },
+    getTeachersAffectedCount(){
+      var ids = {}
+      this.iCanNotAddIt.forEach(function (list) {
+        list.forEach(function (item) {
+          if (item.teacher && item.teacher.id != null) ids[item.teacher.id] = true
+        })
+      })
+      return Object.keys(ids).length
+    },
+    orderListByShuffledTeachers(list){
+      if (!list || list.length === 0) return list
+      var byTeacher = {}
+      list.forEach(function (item) {
+        var tid = item.teacher.id
+        if (!byTeacher[tid]) byTeacher[tid] = []
+        byTeacher[tid].push(item)
+      })
+      var teacherIds = this.shuffleArray(Object.keys(byTeacher).map(Number))
+      var out = []
+      teacherIds.forEach(function (tid) {
+        byTeacher[tid].forEach(function (item) { out.push(item) })
+      })
+      return out
+    },
+    cloneScheduleState(){
+      var subInClasses = this.data.subInClasses
+      var copy = []
+      for (var ci = 0; ci < subInClasses.length; ci++) {
+        copy[ci] = []
+        for (var di = 0; di < subInClasses[ci].length; di++) {
+          copy[ci][di] = []
+          for (var si = 0; si < subInClasses[ci][di].length; si++) {
+            var c = subInClasses[ci][di][si]
+            copy[ci][di][si] = {
+              subject: c.subject && c.subject.id != null ? { id: c.subject.id, name: c.subject.name } : { id: null, name: null },
+              teacher: c.teacher && c.teacher.id != null ? { id: c.teacher.id, name: c.teacher.name } : { id: null, name: null }
+            }
+          }
+        }
+      }
+      var canNotAddCopy = this.iCanNotAddIt.map(function (list) { return list.slice() })
+      return { subInClasses: copy, iCanNotAddIt: canNotAddCopy }
+    },
+    restoreScheduleState(state){
+      var subInClasses = this.data.subInClasses
+      var copy = state.subInClasses
+      for (var ci = 0; ci < copy.length; ci++) {
+        for (var di = 0; di < copy[ci].length; di++) {
+          for (var si = 0; si < copy[ci][di].length; si++) {
+            subInClasses[ci][di][si].subject = copy[ci][di][si].subject
+            subInClasses[ci][di][si].teacher = copy[ci][di][si].teacher
+          }
+        }
+      }
+      for (var i = 0; i < state.iCanNotAddIt.length; i++) {
+        this.iCanNotAddIt[i] = state.iCanNotAddIt[i].slice()
+      }
+    },
     GoToUrl(url){
       eventBus.$emit('ChangeUrl',url)
     },
@@ -333,17 +409,53 @@ export default {
       }, 50);
     },
     addSubjectToAllClassByFirstToEndClass(){
-      this.showLoad = true;
-      setTimeout(() => {
-        this.restartData();
-  
-        this.data.mainData.classes.forEach((theClass) => {
-          this.addSubjectToSpecificallyClass(theClass.id)
-        })
-        this.checkIfBestDistribution();
-      }, 50);
+      var self = this
+      this.showLoad = true
+      setTimeout(function () {
+        var numAttempts = 6
+        var bestTotal = Infinity
+        var bestClassesAffected = Infinity
+        var bestTeachersAffected = Infinity
+        var bestState = null
+
+        for (var attempt = 0; attempt < numAttempts; attempt++) {
+          self.restartData()
+          var classOrder = self.data.mainData.classes.slice()
+          if (attempt > 0) classOrder = self.shuffleArray(classOrder)
+
+          var useTeacherOrder = attempt === 2 || attempt === 4
+
+          classOrder.forEach(function (theClass) {
+            var list = self.userDataBy('class', theClass.id)
+            if (attempt > 0) {
+              list = useTeacherOrder ? self.orderListByShuffledTeachers(list) : self.shuffleArray(list)
+            }
+            list.forEach(function (data) {
+              self.addSubjectToClass(data.theClass.id, data)
+            })
+          })
+
+          self.checkIfBestDistribution()
+
+          var total = self.getTotalCanNotAdd()
+          var classesAffected = self.getClassesAffectedCount()
+          var teachersAffected = self.getTeachersAffectedCount()
+          var isBetter = total < bestTotal ||
+            (total === bestTotal && classesAffected < bestClassesAffected) ||
+            (total === bestTotal && classesAffected === bestClassesAffected && teachersAffected < bestTeachersAffected)
+          if (isBetter) {
+            bestTotal = total
+            bestClassesAffected = classesAffected
+            bestTeachersAffected = teachersAffected
+            bestState = self.cloneScheduleState()
+          }
+        }
+
+        if (bestState != null) self.restoreScheduleState(bestState)
+        self.showLoad = false
+      }, 50)
     },
-    addSubjectToSpecificallyClass(classId){
+    addSubjectToSpecificallyClass(classId, useShuffleOrder){
       var classIndex;
       for (classIndex = 0; classIndex < this.data.mainData.classes.length; classIndex++) {
         if (this.data.mainData.classes[classIndex].id == classId) {
@@ -360,10 +472,11 @@ export default {
       });
       this.addFixedSubjectsToClasses()
 
-      this.userDataBy('class',classId).forEach((data)=>{
-        this.addSubjectToClass(data.theClass.id,data)
+      var list = this.userDataBy('class', classId)
+      if (useShuffleOrder && list.length > 0) list = this.shuffleArray(list)
+      list.forEach((data)=>{
+        this.addSubjectToClass(data.theClass.id, data)
       })
-
     },
     userDataBy(by,id){
       if (by == "class") {
@@ -382,15 +495,35 @@ export default {
 
       return []
     },
-    addBestDistribution(canNotAddID){      
-      if(this.bestDistribution.canNotAddLength == null || this.iCanNotAddIt[canNotAddID - 1].length < this.bestDistribution.canNotAddLength){
-        this.bestDistribution.data = this.data.subInClasses[canNotAddID - 1];
-        this.bestDistribution.canNotAddLength = this.iCanNotAddIt[canNotAddID - 1].length
+    addBestDistribution(canNotAddID){
+      var idx = canNotAddID - 1
+      var currentLen = this.iCanNotAddIt[idx].length
+      if (this.bestDistribution.canNotAddLength == null || currentLen < this.bestDistribution.canNotAddLength) {
+        var src = this.data.subInClasses[idx]
+        var copy = []
+        for (var d = 0; d < src.length; d++) {
+          copy[d] = []
+          for (var s = 0; s < src[d].length; s++) {
+            var c = src[d][s]
+            copy[d][s] = {
+              subject: c.subject && c.subject.id != null ? { id: c.subject.id, name: c.subject.name } : { id: null, name: null },
+              teacher: c.teacher && c.teacher.id != null ? { id: c.teacher.id, name: c.teacher.name } : { id: null, name: null }
+            }
+          }
+        }
+        this.bestDistribution.data = copy
+        this.bestDistribution.canNotAddLength = currentLen
+        this.bestDistribution.canNotAddList = this.iCanNotAddIt[idx].slice()
       }
-      
-      if(this.iCanNotAddIt[canNotAddID - 1].length > this.bestDistribution.canNotAddLength && this.bestDistribution.canNotAddLength != null){
-        this.data.subInClasses[canNotAddID - 1] = this.bestDistribution.data;
-        this.iCanNotAddIt[canNotAddID - 1].length = this.bestDistribution.canNotAddLength
+      if (currentLen > this.bestDistribution.canNotAddLength && this.bestDistribution.canNotAddLength != null) {
+        var best = this.bestDistribution.data
+        for (var dd = 0; dd < best.length; dd++) {
+          for (var ss = 0; ss < best[dd].length; ss++) {
+            this.data.subInClasses[idx][dd][ss].subject = best[dd][ss].subject
+            this.data.subInClasses[idx][dd][ss].teacher = best[dd][ss].teacher
+          }
+        }
+        this.iCanNotAddIt[idx] = this.bestDistribution.canNotAddList.slice()
       }
     },
     addSubjectToAllClassWithOutCheck(){
@@ -411,21 +544,19 @@ export default {
       var theAllSubjectTry = 0
       while (canNotAddClassCount > 0) {
 
+          var useShuffle = theAllSubjectTry > 0 && theAllSubjectTry % 10 === 0
           this.iCanNotAddIt.forEach(inClassNotAdd => {
             let theClassTry = 0
             if (inClassNotAdd.length > 0) {
-              let id = inClassNotAdd[0].theClass.id;
+              let id = inClassNotAdd[0].theClass.id
               while (this.iCanNotAddIt[id - 1].length > 0) {
-                this.addSubjectToSpecificallyClass(id)
+                this.addSubjectToSpecificallyClass(id, useShuffle)
                 this.addBestDistribution(id)
-      
-                if (theClassTry++ == 400) {
-                  break
-                }
+                if (theClassTry++ === 400) break
               }
-                this.bestDistribution={data:null,canNotAddLength:null}
+              this.bestDistribution = { data: null, canNotAddLength: null, canNotAddList: null }
             }
-          });
+          })
 
           canNotAddClassCount = 0
           this.iCanNotAddIt.forEach(inClassNotAdd => {
@@ -438,12 +569,8 @@ export default {
           if (++theAllSubjectTry == this.data.possibilityLevel * 20) {
             break
           }
-          if (canNotAddClassCount > 0 && theAllSubjectTry % 5 == 0) {
-            console.log("change table");
+          if (canNotAddClassCount > 0 && theAllSubjectTry % 5 === 0) {
             this.addSubjectToAllClassWithOutCheck()
-          }
-          if (canNotAddClassCount > 0 && theAllSubjectTry % 10 == 0) {
-            console.log("change user Config");
           }
       }
       theAllSubjectTry = 0
