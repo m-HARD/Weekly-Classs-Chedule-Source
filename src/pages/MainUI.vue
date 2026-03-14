@@ -203,19 +203,59 @@ export default {
         theClass[data.fixed.location.day][data.fixed.location.sub].teacher = data.teacher
       })
     },
+    countTeacherFreeSlotsOnDay(teacherId, dayIndex) {
+      var count = 0
+      this.data.subInClasses.forEach(function (row) {
+        if (row[dayIndex]) {
+          row[dayIndex].forEach(function (cell) {
+            if (cell.teacher.id === null || cell.teacher.id === 0) count++
+          })
+        }
+      })
+      return count
+    },
+    countClassFreeSlotsOnDay(classIndex, dayIndex) {
+      if (!this.data.subInClasses[classIndex] || !this.data.subInClasses[classIndex][dayIndex]) return 0
+      var count = 0
+      this.data.subInClasses[classIndex][dayIndex].forEach(function (cell) {
+        if (cell.subject.name == null) count++
+      })
+      return count
+    },
+    scoreSlotForPlacement(data, dayIndex, subIdx, emptyInClassEntry, classIndex) {
+      var teacherId = data.teacherId
+      var slotsInDay = this.data.subInClasses[classIndex][dayIndex]
+        ? this.data.subInClasses[classIndex][dayIndex].length
+        : 0
+      var teacherFlex = this.countTeacherFreeSlotsOnDay(teacherId, dayIndex)
+      var classFlex = this.countClassFreeSlotsOnDay(classIndex, dayIndex)
+      var score = teacherFlex + classFlex
+      if (data.data.size === 2 && slotsInDay > 1) {
+        var mid = (slotsInDay - 1) / 2
+        var subLoc = emptyInClassEntry.data[subIdx].loc
+        score += (slotsInDay - Math.abs(subLoc - mid))
+      }
+      return score
+    },
     canAdd(data){
       if (data.data.fixed.status)return {iCan:false,location:0,location2:0}
 
-      var emptyInClass = this.emptySubInClass(data.theClass);
-      var found = false
-      var foundDayIdx = -1
-      var foundSubIdx = -1
+      var emptyInClass = this.emptySubInClass(data.theClass)
+      var classIndex = -1
+      for (var c = 0; c < this.data.mainData.classes.length; c++) {
+        if (this.data.mainData.classes[c].id === data.data.theClass.id) {
+          classIndex = c
+          break
+        }
+      }
+      var validSlots = []
 
-      if (emptyInClass.length > 0){
-        for (var dayIdx = 0; dayIdx < emptyInClass.length && !found; dayIdx++) {
+      if (emptyInClass.length > 0 && classIndex >= 0) {
+        for (var dayIdx = 0; dayIdx < emptyInClass.length; dayIdx++) {
           var sc1 = emptyInClass[dayIdx]
+          var dayIndex = sc1.loc
           var maxSub = data.data.size === 2 ? sc1.data.length - 1 : sc1.data.length
-          for (var subIdx = 0; subIdx < maxSub && !found; subIdx++) {
+          for (var subIdx = 0; subIdx < maxSub; subIdx++) {
             var teacherIsEmpty = this.teacherIsEmpty(data.teacherId, sc1.loc, sc1.data[subIdx].loc)
             var validation = sc1.data[subIdx].data.subject.name == null && teacherIsEmpty
             if (data.data.size === 2) {
@@ -231,28 +271,27 @@ export default {
               }
             }
             if (validation) {
-              found = true
-              foundDayIdx = dayIdx
-              foundSubIdx = subIdx
+              var score = this.scoreSlotForPlacement(data, dayIndex, subIdx, sc1, classIndex)
+              validSlots.push({ dayIdx: dayIdx, subIdx: subIdx, score: score })
             }
           }
         }
       }
 
-      if (!found) {
-        this.iCanNotAddIt[data.data.theClass.id - 1].push(data.data)
-      }
-
-      var youCanAdd = {iCan:false,location:0,location2:0}
+      var found = validSlots.length > 0
       if (found) {
-        var sel = emptyInClass[foundDayIdx]
-        youCanAdd = {
+        validSlots.sort(function (a, b) { return b.score - a.score })
+        var best = validSlots[0]
+        var sel = emptyInClass[best.dayIdx]
+        return {
           iCan: true,
-          location: sel.data[foundSubIdx].data,
-          location2: data.data.size === 2 ? sel.data[foundSubIdx + 1].data : 0
+          location: sel.data[best.subIdx].data,
+          location2: data.data.size === 2 ? sel.data[best.subIdx + 1].data : 0
         }
       }
-      return youCanAdd
+
+      this.iCanNotAddIt[data.data.theClass.id - 1].push(data.data)
+      return { iCan: false, location: 0, location2: 0 }
     },
 
     addSubjectToClass(id,data){
