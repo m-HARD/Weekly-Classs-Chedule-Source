@@ -75,7 +75,6 @@ export default {
       mainData:{
         subInDay:['الأولى','التانية','التالتة','الرابعة','الخامسة','السادسة','السابعة','التامنة','الناسعة'],
         dayOfWeek:[
-          {id:1,name:'السبت'},
           {id:2,name:'الأحد'},
           {id:3,name:'الاثنين'},
           {id:4,name:'الثلاثاء'},
@@ -152,6 +151,9 @@ export default {
     })
     eventBus.$on('changePossibilityLevel',(data)=>{
       this.possibilityLevel = data
+    })
+    eventBus.$on('dataImported', () => {
+      this.addSubInClass()
     })
   },
   methods: {

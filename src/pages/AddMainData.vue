@@ -153,7 +153,7 @@ export default {
   data() {
     return {
       dayOfWeekInput:[
-          {id:1,name:'السبت',state:true},
+          {id:1,name:'السبت',state:false},
           {id:2,name:'الأحد',state:true},
           {id:3,name:'الأثنين',state:true},
           {id:4,name:'الثلاثاء',state:true},
@@ -170,7 +170,20 @@ export default {
       },
     }
   },
+  created() {
+    var self = this
+    eventBus.$on('syncDayOfWeekFromMainData', function(){ self.syncDayOfWeekFromMainData() })
+  },
+  activated() {
+    this.syncDayOfWeekFromMainData()
+  },
   methods: {
+      syncDayOfWeekFromMainData(){
+        var activeIds = (this.data.mainData.dayOfWeek || []).map(function(d){ return d.id != null ? Number(d.id) : null }).filter(function(id){ return id != null })
+        this.dayOfWeekInput.forEach(function(day){
+          day.state = activeIds.indexOf(Number(day.id)) >= 0
+        })
+      },
       GoToUrl(url){
         eventBus.$emit('ChangeUrl',url)
       },

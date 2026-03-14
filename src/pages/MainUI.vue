@@ -260,6 +260,8 @@ export default {
             var validation = sc1.data[subIdx].data.subject.name == null && teacherIsEmpty
             if (data.data.size === 2) {
               validation = validation && this.nextLocIsEmpty(sc1.data[subIdx + 1], data.teacherId, sc1.loc, sc1.data[subIdx].loc)
+              var firstSlotLoc = sc1.data[subIdx].loc
+              if (firstSlotLoc === 2) validation = false
             }
             if (!data.data.duplication) {
               validation = validation && this.DayHasNoThisSubject(data.data.theClass.id, sc1.loc, data.data.subject.id)

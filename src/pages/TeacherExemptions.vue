@@ -71,7 +71,22 @@ export default {
       this.TeacherExemptions()
     },
     activated() {
-      this.maxSubInDay = Math.max(...this.data.mainData.classes.map(data => {return data.subInDay}))
+      this.maxSubInDay = Math.max(8, ...(this.data.mainData.classes || []).map(function(data){ return data.subInDay || 0 }))
+      var numTeachers = (this.data.mainData.teachers || []).length
+      var numDays = (this.data.mainData.dayOfWeek || []).length
+      while (this.TeachersExemptionsShow.length < numTeachers) {
+        var theDay = []
+        for (var x = 0; x < numDays; x++) {
+          var sub = []
+          for (var i = 0; i < 8; i++) sub.push(false)
+          theDay.push(sub)
+        }
+        this.TeachersExemptionsShow.push(theDay)
+      }
+      if (this.TeachersExemptionsShow.length > numTeachers) {
+        this.TeachersExemptionsShow.splice(numTeachers)
+      }
+      this.TeacherExemptions()
     },
     methods: {
       GoToUrl(url){
@@ -97,12 +112,16 @@ export default {
         return returnVal
       },
       TeacherExemptions(){
-        this.data.mainData.teachers.forEach(teacher => {
-          let teacherExemptions = this.TeacherExemptionsIsFound(teacher.id)
-  
+        var self = this
+        this.data.mainData.teachers.forEach(function(teacher, teacherIndex) {
+          var row = self.TeachersExemptionsShow[teacherIndex]
+          if (!row) return
+          var teacherExemptions = self.TeacherExemptionsIsFound(teacher.id)
           if (teacherExemptions) {
-            teacherExemptions.locations.forEach(singleExemption => {
-              this.TeachersExemptionsShow[teacher.id -1][singleExemption.day][singleExemption.sub] = true
+            teacherExemptions.locations.forEach(function(singleExemption) {
+              if (row[singleExemption.day] && row[singleExemption.day][singleExemption.sub] !== undefined) {
+                self.$set(row[singleExemption.day], singleExemption.sub, true)
+              }
             })
           }
         })
@@ -118,13 +137,17 @@ export default {
         })
       },
       exemptionReservation(teacher,day,sub){
+        var teacherIndex = this.data.mainData.teachers.findIndex(function(t){ return t.id == teacher.id })
+        if (teacherIndex < 0) return
+        var row = this.TeachersExemptionsShow[teacherIndex]
+        if (!row || !row[day]) return
 
         let teacherExemptions = this.TeacherExemptionsIsFound(teacher.id)
 
         if (teacherExemptions) {
           let ifExempyionIsExist = this.ifExempyionIsExist(teacherExemptions.locations, day, sub)
           if (ifExempyionIsExist !== false) {
-            this.$set(this.TeachersExemptionsShow[teacher.id -1][day], sub, false)
+            this.$set(row[day], sub, false)
             teacherExemptions.locations.splice(ifExempyionIsExist,1)
 
             if(teacherExemptions.locations.length == 0){
@@ -140,7 +163,7 @@ export default {
               }
             }
           }else{
-            this.$set(this.TeachersExemptionsShow[teacher.id -1][day], sub, true)
+            this.$set(row[day], sub, true)
             teacherExemptions.locations.push({day:day,sub:sub})
           }
         }else{
@@ -150,7 +173,7 @@ export default {
             data.isExemptions = true
           })
 
-          this.$set(this.TeachersExemptionsShow[teacher.id -1][day], sub, true)
+          this.$set(row[day], sub, true)
           this.data.teacherExemptions.push({
             teacher:teacher,
             locations:[{"day":day,"sub":sub}]
