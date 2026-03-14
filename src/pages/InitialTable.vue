@@ -248,32 +248,52 @@ export default {
         var retail = singleUserConfig.retail
   
         if (retail == 0) {
-  
-          for (let i = 0; i < this.data.mainData.dayOfWeek.length; i++) {
+          var numDays = this.data.mainData.dayOfWeek.length
+          var size = singleUserConfig.size
+          var slotsPerDay = singleUserConfig.theClass && singleUserConfig.theClass.subInDay != null ? singleUserConfig.theClass.subInDay : 7
+          var d2 = Math.floor(size / 2)
+          var d1 = size - 2 * d2
+          for (var i = 0; i < numDays; i++) {
             retailArray.push(0)
           }
-          let size = singleUserConfig.size
-  
-          while (size > 0) {
-            do {
-              var randomLocation = Math.floor(Math.random() * retailArray.length)
-            } while (retailArray[randomLocation] + 1 > 2);
-  
-            retailArray[randomLocation] += 1;
-            size -= 1;
+          var idx = 0
+          while (d2 > 0 && idx < numDays) {
+            if (slotsPerDay >= 2) {
+              retailArray[idx] = 2
+              d2--
+            }
+            idx++
           }
-  
-  
-  
-          for (let index = 0; index < retailArray.length; index++) {
-            if (retailArray[index] == 0) {
-              retailArray.splice(index,1);
+          while (d1 > 0 && idx < numDays) {
+            retailArray[idx] = 1
+            d1--
+            idx++
+          }
+          while (d2 > 0) {
+            for (var j = 0; j < numDays && d2 > 0; j++) {
+              if (retailArray[j] === 0) {
+                retailArray[j] = 2
+                d2--
+              }
+            }
+          }
+          while (d1 > 0) {
+            for (var k = 0; k < numDays && d1 > 0; k++) {
+              if (retailArray[k] === 0) {
+                retailArray[k] = 1
+                d1--
+              }
+            }
+          }
+          for (var index = 0; index < retailArray.length; index++) {
+            if (retailArray[index] === 0) {
+              retailArray.splice(index, 1)
               index--
             }
           }
-          retailArray.sort(function (a,b) {
-            return (a == b ? 0 : (a < b ? 1 : -1 ));       
-          });
+          retailArray.sort(function (a, b) {
+            return (a === b ? 0 : (a < b ? 1 : -1))
+          })
         }
         if (retail == 1 || retail == 3) {
   

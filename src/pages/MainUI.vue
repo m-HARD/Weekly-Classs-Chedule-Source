@@ -206,54 +206,50 @@ export default {
     canAdd(data){
       if (data.data.fixed.status)return {iCan:false,location:0,location2:0}
 
-      var theTry = 0;
       var emptyInClass = this.emptySubInClass(data.theClass);
-      var canAdd = false
+      var found = false
+      var foundDayIdx = -1
+      var foundSubIdx = -1
 
       if (emptyInClass.length > 0){
-        canAdd = true
-        var randomDay,randomSubInDay,validation = true;
-
-        do {
-          randomDay = Math.floor(Math.random() * emptyInClass.length)
-          randomSubInDay = Math.floor(Math.random() * emptyInClass[randomDay].data.length)
-
-          if(theTry++ == 500){
-            canAdd = false;
-            this.iCanNotAddIt[data.data.theClass.id -1].push(data.data)
-            break
-          }
-
-          var sc1 = emptyInClass[randomDay]
-
-          var teacherIsEmpty = this.teacherIsEmpty(data.teacherId, sc1.loc, sc1.data[randomSubInDay].loc)
-          validation = sc1.data[randomSubInDay].data.subject.name == null && teacherIsEmpty
-          
-          if (data.data.size == 2) {
-            validation = validation && this.nextLocIsEmpty(sc1.data[randomSubInDay + 1], data.teacherId, sc1.loc, sc1.data[randomSubInDay].loc)
-          }
-          if (!data.data.duplication) {
-            validation = validation && this.DayHasNoThisSubject(data.data.theClass.id, sc1.loc, data.data.subject.id)
-          }
-          if (typeof data.data.isExemptions != 'undefined' && data.data.isExemptions) {
-            validation = validation && this.locationIsAnExemption(data.teacherId, sc1.loc, sc1.data[randomSubInDay].loc)
-            if (data.data.size == 2) {
-              validation = validation && this.locationIsAnExemption(data.teacherId, sc1.loc, sc1.data[randomSubInDay +1].loc)
+        for (var dayIdx = 0; dayIdx < emptyInClass.length && !found; dayIdx++) {
+          var sc1 = emptyInClass[dayIdx]
+          var maxSub = data.data.size === 2 ? sc1.data.length - 1 : sc1.data.length
+          for (var subIdx = 0; subIdx < maxSub && !found; subIdx++) {
+            var teacherIsEmpty = this.teacherIsEmpty(data.teacherId, sc1.loc, sc1.data[subIdx].loc)
+            var validation = sc1.data[subIdx].data.subject.name == null && teacherIsEmpty
+            if (data.data.size === 2) {
+              validation = validation && this.nextLocIsEmpty(sc1.data[subIdx + 1], data.teacherId, sc1.loc, sc1.data[subIdx].loc)
+            }
+            if (!data.data.duplication) {
+              validation = validation && this.DayHasNoThisSubject(data.data.theClass.id, sc1.loc, data.data.subject.id)
+            }
+            if (typeof data.data.isExemptions !== 'undefined' && data.data.isExemptions) {
+              validation = validation && this.locationIsAnExemption(data.teacherId, sc1.loc, sc1.data[subIdx].loc)
+              if (data.data.size === 2) {
+                validation = validation && this.locationIsAnExemption(data.teacherId, sc1.loc, sc1.data[subIdx + 1].loc)
+              }
+            }
+            if (validation) {
+              found = true
+              foundDayIdx = dayIdx
+              foundSubIdx = subIdx
             }
           }
-        } while (!(validation));
+        }
+      }
 
-
-      }else{
-        this.iCanNotAddIt[data.data.theClass.id -1].push(data.data)
+      if (!found) {
+        this.iCanNotAddIt[data.data.theClass.id - 1].push(data.data)
       }
 
       var youCanAdd = {iCan:false,location:0,location2:0}
-      if (canAdd && validation) {
+      if (found) {
+        var sel = emptyInClass[foundDayIdx]
         youCanAdd = {
-          iCan:canAdd,
-          location:emptyInClass[randomDay].data[randomSubInDay].data,
-          location2:data.data.size == 2  ? emptyInClass[randomDay].data[randomSubInDay + 1].data : 0
+          iCan: true,
+          location: sel.data[foundSubIdx].data,
+          location2: data.data.size === 2 ? sel.data[foundSubIdx + 1].data : 0
         }
       }
       return youCanAdd

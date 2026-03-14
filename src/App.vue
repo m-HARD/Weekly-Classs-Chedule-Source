@@ -77,26 +77,25 @@ export default {
         dayOfWeek:[
           {id:1,name:'السبت'},
           {id:2,name:'الأحد'},
-          {id:3,name:'الأثنين'},
+          {id:3,name:'الاثنين'},
           {id:4,name:'الثلاثاء'},
-          {id:5,name:'الأربعاء'},
+          {id:5,name:'الاربعاء'},
           {id:6,name:'الخميس'},
         ],
         classes:[
-          {id:1,name:'اولى أ',subInDay:5},
-          {id:2,name:'تانية أ',subInDay:5},
-          {id:3,name:'تالتة أ',subInDay:5},
-          {id:4,name:'رابعة أ',subInDay:6},
-          {id:5,name:'خامسة أ',subInDay:7},
-          {id:6,name:'سادسة أ',subInDay:7},
-          {id:7,name:'أولى متوسط أ',subInDay:7},
-          {id:8,name:'اولى ب',subInDay:5},
-          {id:9,name:'تانية ب',subInDay:5},
-          {id:10,name:'تالتة ب',subInDay:5},
-          {id:11,name:'رابعة ب',subInDay:6},
-          {id:12,name:'خامسة ب',subInDay:7},
-          {id:13,name:'سادسة ب',subInDay:7},
-          {id:14,name:'أولى متوسط ب',subInDay:7}
+          {id:1,name:'الأول أ',subInDay:6},
+          {id:2,name:'الاول ب',subInDay:6},
+          {id:3,name:'الثاني أ',subInDay:6},
+          {id:4,name:'الثاني ب',subInDay:6},
+          {id:5,name:'الثالث أ',subInDay:6},
+          {id:6,name:'الثالث ب',subInDay:6},
+          {id:7,name:'الرابع',subInDay:7},
+          {id:8,name:'الخامس',subInDay:7},
+          {id:9,name:'السادس أ',subInDay:7},
+          {id:10,name:'السادس ب',subInDay:7},
+          {id:11,name:'الأول المتوسط',subInDay:7},
+          {id:12,name:'الثاني متوسط',subInDay:7},
+          {id:13,name:'الثالث متوسط',subInDay:7}
         ],
         subjects:[
             {id:1,name:'اسلامية'},
@@ -107,35 +106,35 @@ export default {
             {id:6,name:'علوم'},
             {id:7,name:'تاريخ'},
             {id:8,name:'جغرافيا'},
-            {id:9,name:'فنون'},
-            {id:10,name:'مكتبة'},
-            {id:11,name:'نشاط'},
-            {id:12,name:'احتياطي'}
+            {id:9,name:'تقنية'},
+            {id:10,name:'حاسوب'},
+            {id:11,name:'تسميع'},
+            {id:12,name:'فنون'},
+            {id:13,name:'مكتبة'},
+            {id:14,name:'نشاط'},
+            {id:15,name:'احتياطي'}
         ],
         teachers:[
           {id:1,name:'لا يوجد'},
-          {id:2,name:'نضال'},
-          {id:3,name:'تسابيح'},
-          {id:4,name:'اسراء'},
-          {id:5,name:'سحر'},
-          {id:6,name:'سماهر'},
-          {id:7,name:'شيماء'},
-          {id:8,name:'دعاء مبارك'},
-          {id:9,name:'بلابل'},
-          {id:10,name:'دعاء محمد'},
-          {id:11,name:'ماجدة'},
-          {id:12,name:'اسرار'},
-          {id:13,name:'سناء'},
-          {id:14,name:'عزة'},
-          {id:15,name:'ريان'},
-          {id:16,name:'صدام'},
-          {id:17,name:'صلاح'},
-          {id:18,name:'محمد'},
-          {id:19,name:'حامد'},
-          {id:20,name:'عصام'},
-          {id:21,name:'أ. مكتبة'},
-          {id:22,name:'أ. نشاط'},
-          {id:23,name:'احتياطي'}
+          {id:2,name:'ماجدة اولى'},
+          {id:3,name:'حورية عبدالجليل'},
+          {id:4,name:'دعاء محمد'},
+          {id:5,name:'سهير حسن'},
+          {id:6,name:'سحر محمد'},
+          {id:7,name:'مناهل عباس'},
+          {id:8,name:'ام المؤمنين'},
+          {id:9,name:'الشيماء احمد'},
+          {id:10,name:'صفاء الحافظ'},
+          {id:11,name:'درية'},
+          {id:12,name:'ماجدة تاور'},
+          {id:13,name:'إسراء صديق'},
+          {id:14,name:'شادية الريح'},
+          {id:15,name:'عازة عمر'},
+          {id:16,name:'رشدي محمد'},
+          {id:17,name:'حسين حسن'},
+          {id:18,name:'م مرافي'},
+          {id:19,name:'م ماثر'},
+          {id:20,name:'م رهام'}
         ],
         colors:["#B46EC75c","#6FC76E5c","#6EC6C75c","#6E98C75c","#6E6EC75c","#C76E6E5c","#C6C76E5c","#8EC76E5c","#C7A46E5c","#C79B6E5c","#896EC75c","#A76EC75c","#C76EA15c","#C76E8A5c","#C76E7A5c",
                     "#6E96C75c","#C76EB35c","#C7AD6E5c","#C6C76E5c","#98C76E5c","#6EC77A5c","#6EC7AB5c","#6EB3C75c","#6E91C75c","#C7C76E5c","#6EC77E5c","#6EC7B55c","#C7B06E5c","#FBBB035c","#BFFB035c"]
@@ -188,8 +187,8 @@ export default {
         this.sortUserConfigByClass()
         this.sortUserConfigByTeatcherCount()
         this.sortUserConfigByDuplication()
-        this.sortUserConfigBySize()
-        this.sortUserConfigByExemptions()
+        this.sortUserConfigBySizeDesc()
+        this.sortUserConfigByExemptionsFirst()
         this.sortUserConfigByFixed()
     },
     
@@ -239,9 +238,19 @@ export default {
           return ((a.size == b.size) ? 0 : ((a.size < b.size) ? 1 : -1 ));       
       }.bind(this));
     },
+    sortUserConfigBySizeDesc(){
+      this.userConfig.sort(function (a,b) {
+          return ((a.size == b.size) ? 0 : ((a.size > b.size) ? -1 : 1 ));
+      }.bind(this));
+    },
     sortUserConfigByExemptions(){
       this.userConfig.sort(function (a,b) {
           return ((a.isExemptions == b.isExemptions) ? 0 : ((a.isExemptions < b.isExemptions) ? 1 : -1 ));       
+      }.bind(this));
+    },
+    sortUserConfigByExemptionsFirst(){
+      this.userConfig.sort(function (a,b) {
+          return ((a.isExemptions == b.isExemptions) ? 0 : ((a.isExemptions > b.isExemptions) ? -1 : 1 ));
       }.bind(this));
     },
     sortUserConfigByFixed(){
