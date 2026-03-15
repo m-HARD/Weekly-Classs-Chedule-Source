@@ -435,8 +435,6 @@ export default {
             })
           })
 
-          self.checkIfBestDistribution()
-
           var total = self.getTotalCanNotAdd()
           var classesAffected = self.getClassesAffectedCount()
           var teachersAffected = self.getTeachersAffectedCount()
@@ -452,6 +450,7 @@ export default {
         }
 
         if (bestState != null) self.restoreScheduleState(bestState)
+        self.checkIfBestDistribution()
         self.showLoad = false
       }, 50)
     },
@@ -564,9 +563,8 @@ export default {
               canNotAddClassCount += inClassNotAdd.length
             }
           })
-          
-          
-          if (++theAllSubjectTry == this.data.possibilityLevel * 20) {
+
+          if (++theAllSubjectTry === Math.max(1, (this.data.possibilityLevel || 1) * 20)) {
             break
           }
           if (canNotAddClassCount > 0 && theAllSubjectTry % 5 === 0) {
@@ -574,7 +572,7 @@ export default {
           }
       }
       theAllSubjectTry = 0
-      this.showLoad = false;
+      this.showLoad = false
     },
     restartData(){
       for (let i = 0; i < this.iCanNotAddIt.length; i++) {
