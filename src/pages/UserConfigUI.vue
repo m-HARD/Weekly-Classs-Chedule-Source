@@ -226,6 +226,30 @@ export default {
         })
       )
       XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(config), 'التوزيع')
+      var fixedRows = [['رقم_السجل','الفصل','المادة','الأستاذ','اليوم','الحصة']]
+      this.data.userConfigBeforeChange.forEach(function(r, idx){
+        if (r && r.fixed && r.fixed.status && r.fixed.location) {
+          var dayIdx = r.fixed.location.day
+          var subIdx = r.fixed.location.sub
+          var dayName = (dayIdx != null && dayIdx >= 0 && dayIdx < (this.data.mainData.dayOfWeek || []).length)
+            ? this.data.mainData.dayOfWeek[dayIdx].name
+            : dayIdx
+          fixedRows.push([idx, r.theClass.name, r.subject.name, r.teacher.name, dayName, subIdx])
+        }
+      }.bind(this))
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(fixedRows), 'الحصص_الثابتة')
+
+      var exemptionsRows = [['الأستاذ','اليوم','الحصة']]
+      this.data.teacherExemptions.forEach(function(t){
+        if (!t || !t.teacher || !Array.isArray(t.locations)) return
+        t.locations.forEach(function(loc){
+          var dayName = (loc.day != null && loc.day >= 0 && loc.day < (this.data.mainData.dayOfWeek || []).length)
+            ? this.data.mainData.dayOfWeek[loc.day].name
+            : loc.day
+          exemptionsRows.push([t.teacher.name, dayName, loc.sub])
+        }.bind(this))
+      }.bind(this))
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(exemptionsRows), 'إعفاءات_المعلمين')
       XLSX.writeFile(wb, 'جدول_البيانات.xlsx')
     },
     onImportFileSelected(ev){
@@ -397,6 +421,119 @@ export default {
               } else {
                 list.forEach(function(item){ self.data.userConfigBeforeChange.push(item) })
               }
+            }
+          }
+
+          var dayNameToIndex = {}
+          self.data.mainData.dayOfWeek.forEach(function(d, idx){
+            dayNameToIndex[normVal(d.name)] = idx
+          })
+          var dayToIndex = function (v) {
+            if (typeof v === 'number') return v
+            var byNum = parseInt(v, 10)
+            if (!isNaN(byNum)) return byNum
+            var nv = normVal(v)
+            return dayNameToIndex[nv] != null ? dayNameToIndex[nv] : -1
+          }
+
+          // إعادة تعيين الثابتة قبل تطبيق ما تم استيراده
+          self.data.userConfigBeforeChange.forEach(function(item){
+            if (!item.fixed) item.fixed = { status: false, location: null }
+            item.fixed.status = false
+            item.fixed.location = null
+          })
+
+          if (wb.SheetNames.indexOf('الحصص_الثابتة') >= 0) {
+            var fixedSheet = XLSX.utils.sheet_to_json(wb.Sheets['الحصص_الثابتة'], { header: 1 })
+            if (fixedSheet.length > 1) {
+              var usedFixedIdx = {}
+              fixedSheet.slice(1).forEach(function(row){
+                // صيغة جديدة: رقم_السجل, الفصل, المادة, الأستاذ, اليوم, الحصة
+                // صيغة قديمة: الفصل, المادة, الأستاذ, اليوم, الحصة
+                var hasRecordIndex = row.length >= 6 && (typeof row[0] === 'number' || !isNaN(parseInt(row[0], 10)))
+                var recIdxRaw = hasRecordIndex ? row[0] : null
+                var className = normVal(hasRecordIndex ? row[1] : row[0])
+                var subjectName = normVal(hasRecordIndex ? row[2] : row[1])
+                var teacherName = normVal(hasRecordIndex ? row[3] : row[2])
+                var dayIdx = dayToIndex(hasRecordIndex ? row[4] : row[3])
+                var subRaw = hasRecordIndex ? row[5] : row[4]
+                var parsedFixedSub = parseInt(subRaw, 10)
+                var subIdx = typeof subRaw === 'number' ? subRaw : (isNaN(parsedFixedSub) ? -1 : parsedFixedSub)
+                if (!className || !subjectName || dayIdx < 0 || subIdx < 0) return
+                var fixedTeacherNameNorm = normVal(teacherName)
+
+                var target = null
+                if (hasRecordIndex) {
+                  var recIdx = typeof recIdxRaw === 'number' ? recIdxRaw : parseInt(recIdxRaw, 10)
+                  if (!isNaN(recIdx) && self.data.userConfigBeforeChange[recIdx]) {
+                    target = self.data.userConfigBeforeChange[recIdx]
+                  }
+                }
+                if (!target) {
+                  var targetIndex = self.data.userConfigBeforeChange.findIndex(function(item, idx){
+                    if (usedFixedIdx[idx]) return false
+                    var itemTeacherNorm = normVal(item.teacher && item.teacher.name)
+                    var teacherMatched = false
+                    if (fixedTeacherNameNorm === '') {
+                      teacherMatched = (itemTeacherNorm === '' || itemTeacherNorm === 'لا يوجد')
+                    } else {
+                      teacherMatched = itemTeacherNorm === fixedTeacherNameNorm
+                    }
+                    return normVal(item.theClass && item.theClass.name) === className &&
+                      normVal(item.subject && item.subject.name) === subjectName &&
+                      teacherMatched
+                  })
+                  if (targetIndex >= 0) {
+                    target = self.data.userConfigBeforeChange[targetIndex]
+                    usedFixedIdx[targetIndex] = true
+                  }
+                }
+                if (!target) return
+                target.fixed = { status: true, location: { day: dayIdx, sub: subIdx } }
+              })
+            }
+          }
+
+          if (replace) {
+            self.data.teacherExemptions.splice(0, self.data.teacherExemptions.length)
+            self.data.userConfigBeforeChange.forEach(function(item){ item.isExemptions = false })
+          }
+          if (wb.SheetNames.indexOf('إعفاءات_المعلمين') >= 0) {
+            var exSheet = XLSX.utils.sheet_to_json(wb.Sheets['إعفاءات_المعلمين'], { header: 1 })
+            if (exSheet.length > 1) {
+              var exMap = {}
+              exSheet.slice(1).forEach(function(row){
+                var teacherName = normVal(row[0])
+                var dayIdx = dayToIndex(row[1])
+                var parsedExSub = parseInt(row[2], 10)
+                var subIdx = typeof row[2] === 'number' ? row[2] : (isNaN(parsedExSub) ? -1 : parsedExSub)
+                if (!teacherName || dayIdx < 0 || subIdx < 0) return
+                if (!exMap[teacherName]) exMap[teacherName] = []
+                if (!exMap[teacherName].some(function(loc){ return loc.day === dayIdx && loc.sub === subIdx })) {
+                  exMap[teacherName].push({ day: dayIdx, sub: subIdx })
+                }
+              })
+              Object.keys(exMap).forEach(function(teacherName){
+                var teacher = self.data.mainData.teachers.find(function(t){ return normVal(t.name) === teacherName })
+                if (!teacher) return
+                var exists = self.data.teacherExemptions.find(function(te){
+                  return te.teacher && te.teacher.id === teacher.id
+                })
+                if (exists) {
+                  exMap[teacherName].forEach(function(loc){
+                    if (!exists.locations.some(function(x){ return x.day === loc.day && x.sub === loc.sub })) {
+                      exists.locations.push(loc)
+                    }
+                  })
+                } else {
+                  self.data.teacherExemptions.push({ teacher: teacher, locations: exMap[teacherName] })
+                }
+              })
+              self.data.userConfigBeforeChange.forEach(function(item){
+                item.isExemptions = self.data.teacherExemptions.some(function(te){
+                  return te.teacher && item.teacher && te.teacher.id === item.teacher.id && te.locations.length > 0
+                })
+              })
             }
           }
 

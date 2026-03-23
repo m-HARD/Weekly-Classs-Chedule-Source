@@ -313,6 +313,9 @@ export default {
       }
       return score
     },
+    getRandomInt(max){
+      return Math.floor(Math.random() * max)
+    },
     canAdd(data){
       if (data.data.fixed.status)return {iCan:false,location:0,location2:0}
 
@@ -359,7 +362,8 @@ export default {
       var found = validSlots.length > 0
       if (found) {
         validSlots.sort(function (a, b) { return b.score - a.score })
-        var best = validSlots[0]
+        var topK = Math.min(3, validSlots.length)
+        var best = validSlots[this.getRandomInt(topK)]
         var sel = emptyInClass[best.dayIdx]
         return {
           iCan: true,
@@ -412,7 +416,8 @@ export default {
       var self = this
       this.showLoad = true
       setTimeout(function () {
-        var numAttempts = 6
+        var level = Math.max(1, self.data.possibilityLevel || 1)
+        var numAttempts = Math.min(14, Math.max(8, level * 4))
         var bestTotal = Infinity
         var bestClassesAffected = Infinity
         var bestTeachersAffected = Infinity
@@ -423,7 +428,7 @@ export default {
           var classOrder = self.data.mainData.classes.slice()
           if (attempt > 0) classOrder = self.shuffleArray(classOrder)
 
-          var useTeacherOrder = attempt === 2 || attempt === 4
+          var useTeacherOrder = attempt % 3 === 2
 
           classOrder.forEach(function (theClass) {
             var list = self.userDataBy('class', theClass.id)
@@ -450,7 +455,7 @@ export default {
         }
 
         if (bestState != null) self.restoreScheduleState(bestState)
-        self.checkIfBestDistribution()
+        self.checkIfBestDistribution(Math.min(40, Math.max(20, level * 10)))
         self.showLoad = false
       }, 50)
     },
@@ -525,14 +530,19 @@ export default {
         this.iCanNotAddIt[idx] = this.bestDistribution.canNotAddList.slice()
       }
     },
-    addSubjectToAllClassWithOutCheck(){
+    addSubjectToAllClassWithOutCheck(useShuffleGlobal, useTeacherOrder){
       this.restartData();
-
-      this.data.userConfig.forEach((data)=>{
+      var list = this.data.userConfig.slice()
+      if (useTeacherOrder) {
+        list = this.orderListByShuffledTeachers(list)
+      } else if (useShuffleGlobal) {
+        list = this.shuffleArray(list)
+      }
+      list.forEach((data)=>{
         this.addSubjectToClass(data.theClass.id,data)
       })
     },
-    checkIfBestDistribution(){
+    checkIfBestDistribution(maxOuterOverride){
       var canNotAddClassCount = 0
       this.iCanNotAddIt.forEach(inClassNotAdd => {
         if (inClassNotAdd.length > 0) {
@@ -541,6 +551,9 @@ export default {
       })
 
       var theAllSubjectTry = 0
+      var maxOuter = maxOuterOverride != null ? maxOuterOverride : Math.max(1, (this.data.possibilityLevel || 1) * 20)
+      var noImproveRounds = 0
+      var lastCount = canNotAddClassCount
       while (canNotAddClassCount > 0) {
 
           var useShuffle = theAllSubjectTry > 0 && theAllSubjectTry % 10 === 0
@@ -564,11 +577,24 @@ export default {
             }
           })
 
-          if (++theAllSubjectTry === Math.max(1, (this.data.possibilityLevel || 1) * 20)) {
+          if (canNotAddClassCount < lastCount) {
+            noImproveRounds = 0
+            lastCount = canNotAddClassCount
+          } else {
+            noImproveRounds++
+          }
+
+          if (++theAllSubjectTry === maxOuter) {
             break
           }
           if (canNotAddClassCount > 0 && theAllSubjectTry % 5 === 0) {
-            this.addSubjectToAllClassWithOutCheck()
+            this.addSubjectToAllClassWithOutCheck(true, false)
+          }
+          if (canNotAddClassCount > 0 && noImproveRounds >= 6) {
+            this.addSubjectToAllClassWithOutCheck(true, true)
+            noImproveRounds = 0
+            canNotAddClassCount = this.getTotalCanNotAdd()
+            lastCount = canNotAddClassCount
           }
       }
       theAllSubjectTry = 0
