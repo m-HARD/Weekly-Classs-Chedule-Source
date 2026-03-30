@@ -82,19 +82,21 @@ export default {
           {id:6,name:'الخميس'},
         ],
         classes:[
-          {id:1,name:'الأول أ',subInDay:6},
-          {id:2,name:'الاول ب',subInDay:6},
-          {id:3,name:'الثاني أ',subInDay:6},
-          {id:4,name:'الثاني ب',subInDay:6},
+          {id:1,name:'الأول أ',subInDay:5},
+          {id:2,name:'الاول ب',subInDay:5},
+          {id:3,name:'الثاني أ',subInDay:5},
+          {id:4,name:'الثاني ب',subInDay:5},
           {id:5,name:'الثالث أ',subInDay:6},
           {id:6,name:'الثالث ب',subInDay:6},
-          {id:7,name:'الرابع',subInDay:7},
+          {id:7,name:'الرابع',subInDay:6},
           {id:8,name:'الخامس',subInDay:7},
           {id:9,name:'السادس أ',subInDay:7},
           {id:10,name:'السادس ب',subInDay:7},
-          {id:11,name:'الأول المتوسط',subInDay:7},
-          {id:12,name:'الثاني متوسط',subInDay:7},
-          {id:13,name:'الثالث متوسط',subInDay:7}
+          {id:11,name:'الأول المتوسط أ',subInDay:7},
+          {id:12,name:'الأول المتوسط ب',subInDay:7},
+          {id:13,name:'الثاني متوسط',subInDay:7},
+          {id:14,name:'الثالث متوسط أ',subInDay:7},
+          {id:15,name:'الثالث متوسط ب',subInDay:7}
         ],
         subjects:[
             {id:1,name:'اسلامية'},
@@ -108,10 +110,12 @@ export default {
             {id:9,name:'تقنية'},
             {id:10,name:'حاسوب'},
             {id:11,name:'تسميع'},
-            {id:12,name:'فنون'},
-            {id:13,name:'مكتبة'},
-            {id:14,name:'نشاط'},
-            {id:15,name:'احتياطي'}
+            {id:12,name:'اشراف'},
+            {id:13,name:'فنون'},
+            {id:14,name:'مكتبة'},
+            {id:15,name:'نشاط'},
+            {id:16,name:'احتياطي'},
+            {id:17,name:'فراغ'}
         ],
         teachers:[
           {id:1,name:'لا يوجد'},
@@ -133,7 +137,11 @@ export default {
           {id:17,name:'حسين حسن'},
           {id:18,name:'م مرافي'},
           {id:19,name:'م ماثر'},
-          {id:20,name:'م رهام'}
+          {id:20,name:'م رهام'},
+          {id:21,name:'م ماريا'},
+          {id:22,name:'نون'},
+          {id:23,name:'الكوتش'},
+          {id:24,name:'فراغ'}
         ],
         colors:["#B46EC75c","#6FC76E5c","#6EC6C75c","#6E98C75c","#6E6EC75c","#C76E6E5c","#C6C76E5c","#8EC76E5c","#C7A46E5c","#C79B6E5c","#896EC75c","#A76EC75c","#C76EA15c","#C76E8A5c","#C76E7A5c",
                     "#6E96C75c","#C76EB35c","#C7AD6E5c","#C6C76E5c","#98C76E5c","#6EC77A5c","#6EC7AB5c","#6EB3C75c","#6E91C75c","#C7C76E5c","#6EC77E5c","#6EC7B55c","#C7B06E5c","#FBBB035c","#BFFB035c"]
