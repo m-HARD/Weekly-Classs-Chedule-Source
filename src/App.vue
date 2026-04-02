@@ -136,13 +136,14 @@ export default {
           {id:16,name:'عازة عمر'},
           {id:17,name:'رشدي محمد'},
           {id:18,name:'حسين حسن'},
-          {id:19,name:'م مرافي'},
-          {id:20,name:'م ماثر'},
-          {id:21,name:'م رهام'},
-          {id:22,name:'م ماريا'},
-          {id:23,name:'نون'},
-          {id:24,name:'الكوتش'},
-          {id:25,name:'فراغ'}
+          {id:19,name:'علاء الدين'},
+          {id:20,name:'م مرافي'},
+          {id:21,name:'م ماثر'},
+          {id:22,name:'م رهام'},
+          {id:23,name:'م ماريا'},
+          {id:24,name:'نون'},
+          {id:25,name:'الكوتش'},
+          {id:26,name:'فراغ'}
         ],
         colors:["#B46EC75c","#6FC76E5c","#6EC6C75c","#6E98C75c","#6E6EC75c","#C76E6E5c","#C6C76E5c","#8EC76E5c","#C7A46E5c","#C79B6E5c","#896EC75c","#A76EC75c","#C76EA15c","#C76E8A5c","#C76E7A5c",
                     "#6E96C75c","#C76EB35c","#C7AD6E5c","#C6C76E5c","#98C76E5c","#6EC77A5c","#6EC7AB5c","#6EB3C75c","#6E91C75c","#C7C76E5c","#6EC77E5c","#6EC7B55c","#C7B06E5c","#FBBB035c","#BFFB035c"]
